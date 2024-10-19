@@ -1,8 +1,8 @@
-
 let scene, camera, renderer;
-const cubeSimpan = []
+let solvedScene,solvedCamera,solvedRenderer;
+let cubeState = [];
+const cubeSimpan = [];
 function generateInitialState(n) {
-    const cubeState = [];
     const totalNumbers = n * n * n; 
     const numbers = Array.from({ length: totalNumbers }, (_, i) => i + 1); 
 
@@ -23,42 +23,55 @@ function generateInitialState(n) {
         }
         cubeState.push(layer);
     }
-
-    console.log(cubeState);
-    console.log("Cube simpan : " , cubeSimpan);
+    console.log("Initiate Cube = ", cubeState);
     return cubeState;
 }
 
 
-export function toggleCubeView(cubeState, useBorders) {
-    if (useBorders) {
-        createCubeWithBorders(cubeState);
-    } else {
-        createCube(cubeState);
-    }
-}
 
-let controls;
+let controls, solvedControls;
 function initializeScene() {
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     renderer = new THREE.WebGLRenderer();
-    renderer.setSize(window.innerWidth / 1.2, window.innerHeight / 1.2);
+    renderer.setSize(window.innerWidth / 2.5, window.innerHeight / 2);
     document.getElementById('cubeContainer').appendChild(renderer.domElement);
 
-    camera.position.z = 10;
+    camera.position.z = 12;
+    camera.position.y = 5;
+    camera.position.x = 5;
+
 
     const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
     scene.add(ambientLight);
     controls = new THREE.OrbitControls(camera, renderer.domElement);
-    const n = 4; 
-    const cubeState = generateInitialState(n); //
-   
-
+    
+    const n = 5; 
+    cubeState = generateInitialState(n);
     visualizeCube(cubeState);
 }
-let space = 1.1
-function createLayer(layerState, layerIndex, size) {
+
+function initializeSolvedCubeScene() {
+    solvedScene = new THREE.Scene();
+    solvedCamera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+    solvedRenderer = new THREE.WebGLRenderer();
+    solvedRenderer.setSize(window.innerWidth / 2.5, window.innerHeight / 2);
+    document.getElementById('solvedCubeContainer').appendChild(solvedRenderer.domElement);
+
+    solvedCamera.position.z = 12;
+    solvedCamera.position.y = 5;
+    solvedCamera.position.x = 5;
+
+  
+
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+    solvedScene.add(ambientLight);
+    solvedControls = new THREE.OrbitControls(solvedCamera, solvedRenderer.domElement); 
+    console.log("Solved Renderer initialized:", solvedRenderer); 
+}
+
+let space = 1.1;
+function createLayer(layerState, layerIndex, size,isSolvedCube=false) {
     const layerGroup = new THREE.Group();
 
     for (let i = 0; i < size; i++) {
@@ -69,12 +82,11 @@ function createLayer(layerState, layerIndex, size) {
             cubeSimpan.push(cube);
         }
     }
- 
 
-    layerGroup.position.z = layerIndex 
-
+    layerGroup.position.z = layerIndex;
     return layerGroup;
 }
+
 function setCubeSpacing(newSpacing) {
     space = newSpacing; 
     const size = Math.cbrt(cubeSimpan.length); 
@@ -87,26 +99,26 @@ function setCubeSpacing(newSpacing) {
         cubeSimpan[index].position.set(colIndex * space, rowIndex * space, layerIndex);
     }
 }
-function handleGenerateCube() {
 
-    
-    const n = 4; 
-    const cubeState = generateInitialState(n);
+function handleGenerateCube() {
+    const n = 5; 
+    cubeState = [];
+    cubeState = generateInitialState(n);
     visualizeCube(cubeState);
 }
+
 document.getElementById('generateCubeButton').addEventListener('click', handleGenerateCube);
 document.getElementById('increaseSpacingButton').addEventListener('click', () => {
-    setCubeSpacing(space + 0.2); // Tambah jarak
+    setCubeSpacing(space + 0.2);
 });
 
 document.getElementById('decreaseSpacingButton').addEventListener('click', () => {
-    setCubeSpacing(space - 0.2); // Kurangi jarak, pastikan nilainya tetap positif
+    setCubeSpacing(space - 0.2); 
 });
-
 
 function createTransparentCube(number) {
     const geometry = new THREE.BoxGeometry(1, 1, 1);
-    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.1 }); // Kotak transparan
+    const material = new THREE.MeshBasicMaterial({ color: 0x00ff00, transparent: true, opacity: 0.1 }); 
     const cube = new THREE.Mesh(geometry, material);
 
     const numberMesh = createNumberMesh(number);
@@ -115,6 +127,7 @@ function createTransparentCube(number) {
 
     return cube;
 }
+
 function createNumberMesh(number) {
     const canvas = document.createElement('canvas');
     const context = canvas.getContext('2d');
@@ -122,7 +135,6 @@ function createNumberMesh(number) {
     canvas.height = 100; 
 
     context.fillStyle = 'grey';
-
     context.fillRect(0, 0, canvas.width, canvas.height);
     context.fillStyle = 'white';
     context.font = '50px Arial';
@@ -145,29 +157,65 @@ function createNumberMesh(number) {
     return mesh;
 }
 
-function createCube(cubeState) {
+function createCube(cubeState,isSolvedCube = false) {
+    const targetScene = isSolvedCube ? solvedScene : scene; 
    
-    while (scene.children.length > 0) {
-        scene.remove(scene.children[0]);
+    while (targetScene.children.length > 0) {
+        targetScene.remove(targetScene.children[0]);
     }
 
     const size = cubeState.length;
 
     for (let i = 0; i < size; i++) {
-        const layer = createLayer(cubeState[i], i, size);
-        scene.add(layer);
+        const layer = createLayer(cubeState[i], i, size,isSolvedCube);
+        targetScene.add(layer);
     }
-    animate();
 }
-
 
 function animate() {
     requestAnimationFrame(animate);
+    
     renderer.render(scene, camera);
+    if (solvedRenderer) {
+        solvedControls.update(); 
+        solvedRenderer.render(solvedScene, solvedCamera); 
+    }
 }
 
-export function visualizeCube(cubeState) {
-    createCube(cubeState);
+
+export function visualizeCube(cubeState, isSolvedCube = false) {
+    createCube(cubeState, isSolvedCube); 
+    animate(); 
+}
+export function solveCube(cubeState) {
+    fetch('/api/solve', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ cubeState }) 
+    })
+    .then(response => response.json())
+    .then(result => {
+        console.log('Hasil solusi dari server:', result);
+        const { solvedCube, h_before, h_after } = result;
+        visualizeCube(solvedCube, true); 
+        document.getElementById('hBeforeValue').innerText = h_before;
+        document.getElementById('hAfterValue').innerText = h_after;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
 }
 
-window.onload = initializeScene;
+document.getElementById('solveCubeButton').addEventListener('click', () => {
+    solveCube(cubeState); 
+    
+});
+
+window.onload = () => {
+    initializeScene();
+    initializeSolvedCubeScene();
+    animate(); 
+    
+};
