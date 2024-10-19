@@ -198,10 +198,13 @@ export function solveCube(cubeState) {
     .then(response => response.json())
     .then(result => {
         console.log('Hasil solusi dari server:', result);
-        const { solvedCube, h_before, h_after } = result;
+        const { solvedCube, h_before, h_after,algoritma,n_iter} = result;
         visualizeCube(solvedCube, true); 
         document.getElementById('hBeforeValue').innerText = h_before;
         document.getElementById('hAfterValue').innerText = h_after;
+        document.getElementById('algoritma').innerText = algoritma;
+        document.getElementById('iterasi').innerText = n_iter;
+
     })
     .catch(error => {
         console.error('Error:', error);

@@ -4,6 +4,7 @@ class Cube {
         this.magicNumber = (this.n * (Math.pow(this.n, 3) + 1)) / 2;
         this.cube = cubeState; 
         this.h = 0; 
+        this.iterasi = 0;
     }
 
     objectiveFunction() {
@@ -66,6 +67,7 @@ class Cube {
                                         } else {
                                             
                                             [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                                            this.iterasi++;
                                         }
                                     }
                                 }
@@ -83,6 +85,9 @@ class Cube {
     }
     getMagicNumber(){
         return this.magicNumber;
+    }
+    getIterasi(){
+        return this.iterasi;
     }
 }
 
@@ -102,10 +107,12 @@ export function solveCube(req, res) {
     const solvedCube = magicCube.steepestAscentHillClimbing();
     const objFunctAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
+    const iter = magicCube.getIterasi();
 
     res.json({
         message: "Kubus berhasil diselesaikan",
         algoritma: "Steepest Hill Climb",
+        n_iter: iter,
         solvedCube,
         h_before: objFuncBefore,
         h_after:objFunctAfter,
