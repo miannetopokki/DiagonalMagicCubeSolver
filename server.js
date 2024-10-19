@@ -1,9 +1,16 @@
-const express = require('express');
+// server.js
+import express from 'express';
+import path from 'path';
+import apiRoutes from './src/routes/apiRoutes.js';
+
 const app = express();
-const port = 3000;  
+const PORT = process.env.PORT || 3000;
 
-app.use(express.static(__dirname));
+app.use(express.json()); 
+app.use(express.static(path.join(path.resolve(), 'public'))); 
 
-app.listen(port, () => {
-  console.log(`Server running at http://localhost:${port}`);
+app.use('/api', apiRoutes); 
+
+app.listen(PORT, () => {
+    console.log(`Server running on http://localhost:${PORT}`);
 });

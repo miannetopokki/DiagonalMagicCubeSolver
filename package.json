@@ -1,13 +1,13 @@
 {
     "name": "magic-cube-solver",
     "version": "1.0.0",
-    "description": "3D Magic Cube Solver",
     "main": "server.js",
+    "type": "module",
     "scripts": {
       "start": "node server.js"
     },
     "dependencies": {
-      "express": "^4.17.1"
+      "express": "^latest"
     }
   }
   
