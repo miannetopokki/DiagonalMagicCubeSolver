@@ -54,11 +54,13 @@ class MagicCube {
             this.scene.remove(gridHelper);
             this.nonDeletableObjects = this.nonDeletableObjects.filter(obj => obj.name !== 'gridHelper');
         } else {
-            const newGridHelper = new THREE.GridHelper(20, 20);
+            const newGridHelper = new THREE.GridHelper(30, 30);
             newGridHelper.name = 'gridHelper';
             this.scene.add(newGridHelper);
             this.nonDeletableObjects.push(newGridHelper);
         }
+        console.log("Non Deleteable :" ,  this.nonDeletableObjects);
+
     }
 
     addAxis() {
@@ -72,6 +74,7 @@ class MagicCube {
             this.scene.add(newAxesHelper);
             this.nonDeletableObjects.push(newAxesHelper);
         }
+        console.log("Non Deleteable :" ,  this.nonDeletableObjects);
     }
     
 
@@ -214,8 +217,9 @@ class MagicCube {
                 layerGroup.add(cube);
             }
         }
-        layerGroup.position.z = (layerIndex * this.space) - size /1.5;
-        layerGroup.position.y = 1;
+        layerGroup.position.z = (layerIndex * this.space) +0.5;
+        layerGroup.position.y = 0.5;
+        layerGroup.position.x = 0.5;
         return layerGroup;
     }
 
