@@ -3,11 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hill Climb Algorithm</title>
+    <title>Simulated Annealing Algorithm</title>
     <link rel="stylesheet" href="css/style.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="js/magicCube.js" type="module"></script>
+    <script src="js/simulatedAnnealing.js" type="module"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -20,5 +21,43 @@
         </select>
     </nav>
     <h1>Magic Cube Solver - Simulated Annealing</h1>
+    <section class="button-container">
+        <button id="generateCubeButton" onclick="location.href='/simulatedannealing'">Generate Random Cube State</button>
+        <section class="offset">
+            <button id="addX">+X</button>
+            <button id="minusX">-X</button>
+        </section>
+        <section class="offset">
+            <button id="addY">+Y</button>
+            <button id="minusY">-Y</button>
+        </section>
+        <section class="offset">
+            <button id="addZ">+Z</button>
+            <button id="minusZ">-Z</button>
+        </section>
+
+        <button id="axisButton">Axis</button>
+        <button id="gridButton">Grid </button>
+
+        <button id="solveCubeButton">Solve</button>
+    </section>
+    <section class="cube-container">
+        <div class="cube-item">
+            <h2>Initial State</h2>
+            <div id="cubeContainer"></div>
+            <section class="desc-container">
+                <p id="hBeforeText">H Before: <span id="hBeforeValue">-</span></p>
+            </section>
+        </div>
+        <div class="cube-item">
+            <h2>Solved State</h2>
+            <div id="solvedCubeContainer"></div>
+            <section class="desc-container">
+                <p id="hAfterText">H After: <span id="hAfterValue">-</span></p>
+                <p id="algoritma">Algorithm: <span id="algoritma">-</span></p>
+                <p id="iterasi">Iterations: <span id="iterasi">-</span></p>
+            </section>
+        </div>
+    </section>
 </body>
 </html>

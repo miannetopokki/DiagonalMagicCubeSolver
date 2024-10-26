@@ -80,6 +80,65 @@ class Cube {
 
         return this.cube;
     }
+    stochasticHillClimbing() {
+        let currentH = this.objectiveFunction();
+        const maxIterations = 12000;
+
+        do {
+            improved = false;
+            console.log(this.iterasi);
+            let i = Math.floor(Math.random() * 5);
+            let j = Math.floor(Math.random() * 5);
+            let k = Math.floor(Math.random() * 5);
+
+            let x = Math.floor(Math.random() * 5);
+            let y = Math.floor(Math.random() * 5);
+            let z = Math.floor(Math.random() * 5);
+
+            if (i !== x || j !== y || k !== z) {
+                [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                let newH = this.objectiveFunction();
+                let diffH = currentH - newH;
+                if (newH < currentH) {
+                    currentH = newH; 
+                } else {
+                    [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                }
+                this.iterasi++;
+            }
+        } while (this.iterasi<maxIterations); 
+        return this.cube;
+    }
+    simulatedAnnealing() {
+        let currentH = this.objectiveFunction();
+        let Tvalue = 1000;
+        const coolingRate = 0.95;
+        const maxIterations = 50000;
+
+        do {
+            let i = Math.floor(Math.random() * 5);
+            let j = Math.floor(Math.random() * 5);
+            let k = Math.floor(Math.random() * 5);
+
+            let x = Math.floor(Math.random() * 5);
+            let y = Math.floor(Math.random() * 5);
+            let z = Math.floor(Math.random() * 5);
+
+            if (i !== x || j !== y || k !== z) {
+                [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                let newH = this.objectiveFunction();
+                let diffH = currentH - newH;
+                if (newH < currentH || Math.exp(diffH/Tvalue)>0.5) {
+                    currentH = newH;
+                } else {
+                    [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                }
+                Tvalue *= coolingRate;
+                this.iterasi++;
+            }
+        } while (this.iterasi<maxIterations); 
+        return this.cube;
+    }
     getObjective(){
         return this.objectiveFunction();
     }
@@ -112,6 +171,35 @@ export function solveSteepHC(req, res) {
     res.json({
         message: "Kubus berhasil diselesaikan",
         algoritma: "Steepest Hill Climb",
+        n_iter: iter,
+        solvedCube,
+        h_before: objFuncBefore,
+        h_after:objFunctAfter,
+        magic_number: magicnum
+
+    });
+}
+export function solveSimulatedAnnealing(req, res) {
+    const { cubeState } = req.body; 
+
+    if (!cubeState || !Array.isArray(cubeState)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid cube state provided"
+        });
+    }
+
+    const magicCube = new Cube(cubeState.length, cubeState); 
+    const objFuncBefore = magicCube.getObjective();
+
+    const solvedCube = magicCube.simulatedAnnealing();
+    const objFunctAfter = magicCube.getObjective();
+    const magicnum = magicCube.getMagicNumber();
+    const iter = magicCube.getIterasi();
+
+    res.json({
+        message: "Kubus berhasil diselesaikan",
+        algoritma: "Simulated Annealing",
         n_iter: iter,
         solvedCube,
         h_before: objFuncBefore,
