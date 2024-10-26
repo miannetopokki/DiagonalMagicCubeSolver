@@ -38,6 +38,12 @@ class HillClimb extends MagicCube {
             console.error('Error:', error);
         }
     }
+    async solveSidewayHC(cubeState){
+
+    }
+    async solveRandomRestartHC(cubeState){
+
+    }
 
     solveCube() {
         this.solveSteepHC(this.cubeState); 
@@ -58,5 +64,10 @@ document.getElementById('decreaseSpacingButton').addEventListener('click', () =>
 document.getElementById('solveCubeButton').addEventListener('click', () => {
     hillClimbInstance.solveCube();
 });
-
+document.getElementById('gridButton').addEventListener('click', () => {
+    hillClimbInstance.addGrid();
+});
+document.getElementById('axisButton').addEventListener('click', () => {
+    hillClimbInstance.addAxis();
+});
 export { HillClimb };

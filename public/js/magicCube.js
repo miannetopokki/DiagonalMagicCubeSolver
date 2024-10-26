@@ -15,6 +15,7 @@ class MagicCube {
         this.lastRenderTime = 0;
         this.space = 1;
         this.nsize = 5;
+        this.nonDeletableObjects =  [];
         this.animationProgress = 0;
         this.startPosition = new THREE.Vector3(1000, 1000, 1000);
         this.targetPosition = new THREE.Vector3(5, 5, 12);
@@ -33,18 +34,46 @@ class MagicCube {
         this.renderer.setSize(window.innerWidth / 1.35, window.innerHeight / 1.35);
         document.getElementById('cubeContainer').appendChild(this.renderer.domElement);
 
-        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
-        const axesHelper = new THREE.AxesHelper(5);
 
+        
+        
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         this.scene.add(ambientLight);
-        this.scene.add(axesHelper);
+        this.nonDeletableObjects.push(ambientLight);
         this.controls = new THREE.OrbitControls(this.camera, this.renderer.domElement);
         this.cubeState = this.generateInitialState(this.nsize);
 
         this.visualizeCube(this.cubeState);
         this.createParticles(this.scene);
         this.animate();
+        console.log("Non delete Object : " , this.nonDeletableObjects);
     }
+    addGrid() {
+        const gridHelper = this.nonDeletableObjects.find(obj => obj.name === 'gridHelper');
+        if (gridHelper) {
+            this.scene.remove(gridHelper);
+            this.nonDeletableObjects = this.nonDeletableObjects.filter(obj => obj.name !== 'gridHelper');
+        } else {
+            const newGridHelper = new THREE.GridHelper(20, 20);
+            newGridHelper.name = 'gridHelper';
+            this.scene.add(newGridHelper);
+            this.nonDeletableObjects.push(newGridHelper);
+        }
+    }
+
+    addAxis() {
+        const axesHelper = this.nonDeletableObjects.find(obj => obj.name === 'axesHelper');
+        if (axesHelper) {
+            this.scene.remove(axesHelper);
+            this.nonDeletableObjects = this.nonDeletableObjects.filter(obj => obj.name !== 'axesHelper');
+        } else {
+            const newAxesHelper = new THREE.AxesHelper(20);
+            newAxesHelper.name = 'axesHelper';
+            this.scene.add(newAxesHelper);
+            this.nonDeletableObjects.push(newAxesHelper);
+        }
+    }
+    
 
     initializeSolvedCubeScene() {
         this.solvedScene = new THREE.Scene();
@@ -148,6 +177,7 @@ class MagicCube {
 
         const particleSystem = new THREE.Points(particlesGeometry, particleMaterial);
         particleSystem.name = 'particleSystem';
+        this.nonDeletableObjects.push(particleSystem);
         targetScene.add(particleSystem);
     }
 
@@ -166,6 +196,9 @@ class MagicCube {
             const layer = this.createLayer(cubeState[i], i, size, isSolvedCube);
             targetScene.add(layer);
         }
+
+
+        // Buat OrbitControls
         if (isSolvedCube) {
             this.solvedControls.target.set(center * this.space, center * this.space, center * this.space);
         }
@@ -181,7 +214,8 @@ class MagicCube {
                 layerGroup.add(cube);
             }
         }
-        layerGroup.position.z = layerIndex * this.space;
+        layerGroup.position.z = (layerIndex * this.space) - size /1.5;
+        layerGroup.position.y = 1;
         return layerGroup;
     }
 
@@ -235,8 +269,8 @@ class MagicCube {
     clearScene(targetScene) {
         for (let i = targetScene.children.length - 1; i >= 0; i--) {
             const object = targetScene.children[i];
-            if (object.name === 'particleSystem' || object instanceof THREE.AmbientLight) {
-                continue;
+            if (this.nonDeletableObjects.includes(object)) {
+                continue; 
             }
             targetScene.remove(object);
         }
