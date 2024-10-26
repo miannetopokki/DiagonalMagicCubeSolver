@@ -91,7 +91,7 @@ class Cube {
     }
 }
 
-export function solveCube(req, res) {
+export function solveSteepHC(req, res) {
     const { cubeState } = req.body; 
 
     if (!cubeState || !Array.isArray(cubeState)) {

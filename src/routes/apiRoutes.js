@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { solveCube } from '../controllers/solverController.js';
+import { solveSteepHC } from '../controllers/solverController.js';
 
 const router = Router();
 
-router.post('/solve', solveCube);
+router.post('/steephc', solveSteepHC);
 
 export default router;

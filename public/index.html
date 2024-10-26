@@ -5,41 +5,37 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Magic Cube Solver</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-
-
-
-    <script src="js/magicCube.js" type="module"></script>
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/home.css">
 </head>
 
 <body>
-    <h1>Magic Cube Solver</h1>
-    <section class="cube-container">
-        <div class="cube-item">
-            <h2>Initial State</h2>
-            <div id="cubeContainer"></div>
-            <section class="desc-container">
-                <p id="hBeforeText">H Before: <span id="hBeforeValue">-</span></p>
-            </section>
-        </div>
-        <div class="cube-item">
-            <h2>Solved State</h2>
-            <div id="solvedCubeContainer"></div>
-            <section class="desc-container">
-                <p id="hAfterText">H After: <span id="hAfterValue">-</span></p>
-                <p id="algoritma">Algorithm: <span id="algoritma">-</span></p>
-                <p id="iterasi">Iterations: <span id="iterasi">-</span></p>
-            </section>
-        </div>
-    </section>
-    <section class="button-container">
-        <button id="generateCubeButton" onclick="location.href='/'"">Generate Random Cube State</button>
-        <button id="increaseSpacingButton">Increase Spacing</button>
-        <button id="decreaseSpacingButton">Decrease Spacing</button>
-        <button id="solveCubeButton">Solve</button>
-    </section>
+    <header>
+        <h1>Welcome to Magic Cube Solver</h1>
+        <p>Select an algorithm to solve the magic cube:</p>
+    </header>
+    
+    <nav>
+        <select id="algorithmSelect" onchange="navigateToAlgorithm()">
+            <option value="">-- Choose an Algorithm --</option>
+            <option value="/hillclimb">Hill Climb</option>
+            <option value="/simulatedannealing">Simulated Annealing</option>
+            <option value="/geneticalgorithm">Genetic Algorithm</option>
+        </select>
+    </nav>
+
+    <footer>
+        <p>&copy; 2024 Magic Cube Solver</p>
+    </footer>
+
+    <script>
+        function navigateToAlgorithm() {
+            const selectElement = document.getElementById('algorithmSelect');
+            const selectedValue = selectElement.value;
+            if (selectedValue) {
+                window.location.href = selectedValue;
+            }
+        }
+    </script>
 </body>
 
 </html>
