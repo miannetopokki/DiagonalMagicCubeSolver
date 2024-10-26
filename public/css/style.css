@@ -102,6 +102,10 @@ button {
     cursor: pointer;
     transition: background-color 0.3s;
 }
+.offset{
+    display: flex;
+    flex-direction: row;
+}
 
 button:hover {
     background-color: #0056b3;

@@ -53,13 +53,41 @@ class HillClimb extends MagicCube {
 
 const hillClimbInstance = new HillClimb(); 
 
-document.getElementById('increaseSpacingButton').addEventListener('click', () => {
-    hillClimbInstance.setCubeSpacing(hillClimbInstance.space + 0.2); 
+document.getElementById('addX').addEventListener('click', () => {
+    hillClimbInstance.changeXSpace(true);
 });
 
-document.getElementById('decreaseSpacingButton').addEventListener('click', () => {
-    hillClimbInstance.setCubeSpacing(hillClimbInstance.space - 0.2); 
+document.getElementById('minusX').addEventListener('click', () => {
+    hillClimbInstance.changeXSpace(false);
+
 });
+
+
+
+document.getElementById('addY').addEventListener('click', () => {
+    hillClimbInstance.changeYSpace(true);
+
+});
+
+document.getElementById('minusY').addEventListener('click', () => {
+    hillClimbInstance.changeYSpace(false);
+
+});
+
+
+
+
+
+document.getElementById('addZ').addEventListener('click', () => {
+    hillClimbInstance.changeZSpace(true);
+
+});
+
+document.getElementById('minusZ').addEventListener('click', () => {
+    hillClimbInstance.changeZSpace(false);
+
+});
+
 
 document.getElementById('solveCubeButton').addEventListener('click', () => {
     hillClimbInstance.solveCube();

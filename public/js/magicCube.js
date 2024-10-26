@@ -15,6 +15,9 @@ class MagicCube {
         this.lastRenderTime = 0;
         this.space = 1;
         this.nsize = 5;
+        this.x_offset = 1;
+        this.y_offset = 1;
+        this.z_offset = 0;
         this.nonDeletableObjects =  [];
         this.animationProgress = 0;
         this.startPosition = new THREE.Vector3(1000, 1000, 1000);
@@ -33,8 +36,7 @@ class MagicCube {
         this.renderer = new THREE.WebGLRenderer();
         this.renderer.setSize(window.innerWidth / 1.35, window.innerHeight / 1.35);
         document.getElementById('cubeContainer').appendChild(this.renderer.domElement);
-
-
+       
         
         
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
@@ -153,6 +155,7 @@ class MagicCube {
             }
             this.cubeState.push(layer);
         }
+        console.log(this.cubeState);
         return this.cubeState;
     }
 
@@ -194,30 +197,35 @@ class MagicCube {
         this.clearScene(targetScene);
         const size = cubeState.length;
         const center = size / 2;
-
-        for (let i = 0; i < size; i++) {
-            const layer = this.createLayer(cubeState[i], i, size, isSolvedCube);
-            targetScene.add(layer);
-        }
-
-
+    
+        // Gunakan delay untuk menambahkan setiap layer satu per satu
+        cubeState.forEach((layerState, layerIndex) => {
+            setTimeout(() => {
+                const layer = this.createLayer(layerState, layerIndex, size, isSolvedCube);
+                targetScene.add(layer);
+                console.log("Layer " , layerIndex, ": " , layer.position);
+            }, layerIndex * 25); // 500 ms delay antara setiap layer; sesuaikan sesuai kebutuhan
+        });
+    
         // Buat OrbitControls
         if (isSolvedCube) {
-            this.solvedControls.target.set(center * this.space, center * this.space, center * this.space);
+            this.solvedControls.target.set(this.x_offset *center * this.space, this.y_offset *center * this.space, (this.z_offset) + center * this.space);
         }
-        this.controls.target.set(center * this.space, center * this.space, center * this.space);
+        this.controls.target.set(this.x_offset * center * this.space, this.y_offset *center * this.space, (this.z_offset) + center * this.space);
+        console.log("Pivot : ", center * this.space);
     }
+    
 
     createLayer(layerState, layerIndex, size, isSolvedCube = false) {
         const layerGroup = new THREE.Group();
         for (let i = 0; i < size; i++) {
             for (let j = 0; j < size; j++) {
                 const cube = this.createTransparentCube(layerState[i][j]);
-                cube.position.set(j * this.space, i * this.space, layerIndex);
+                cube.position.set((this.x_offset*j * this.space ), ( this.y_offset*i * this.space), this.z_offset * layerIndex);
                 layerGroup.add(cube);
             }
         }
-        layerGroup.position.z = (layerIndex * this.space) +0.5;
+        layerGroup.position.z = (layerIndex)-0.5  ;
         layerGroup.position.y = 0.5;
         layerGroup.position.x = 0.5;
         return layerGroup;
@@ -246,6 +254,56 @@ class MagicCube {
         }
         this.visualizeCube(this.cubeState);
     
+    }
+    changeYSpace(isAdd) {
+        if(isAdd){
+            this.y_offset += 1;
+        }else{
+            if(this.y_offset <= 1){
+                this.y_offset = 1;
+
+            }else{
+                this.y_offset -= 1;
+            }
+        }
+        if (this.isSolved) {
+            this.visualizeCube(this.solvedCubeState, true);
+        }
+        this.visualizeCube(this.cubeState);
+        
+    }
+    changeZSpace(isAdd) {
+        if(isAdd){
+            this.z_offset += 1;
+        }else{
+            if(this.z_offset <= 0){
+                this.z_offset = 0;
+
+            }else{
+                this.z_offset -= 1;
+            }
+        }
+        if (this.isSolved) {
+            this.visualizeCube(this.solvedCubeState, true);
+        }
+        this.visualizeCube(this.cubeState);
+        
+    }
+    changeXSpace(isAdd) {
+        if(isAdd){
+            this.x_offset += 1;
+        }else{
+            if(this.x_offset <= 1){
+                this.x_offset = 1;
+
+            }else{
+                this.x_offset -= 1;
+            }
+        }
+        if (this.isSolved) {
+            this.visualizeCube(this.solvedCubeState, true);
+        }
+        this.visualizeCube(this.cubeState); 
     }
 
     createNumberSprite(number) {
