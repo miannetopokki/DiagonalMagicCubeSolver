@@ -1,13 +1,12 @@
 {
-    "name": "magic-cube-solver",
-    "version": "1.0.0",
-    "main": "server.js",
-    "type": "module",
-    "scripts": {
-      "start": "node server.js"
-    },
-    "dependencies": {
-      "express": "^latest"
-    }
+  "name": "magic-cube-solver",
+  "version": "1.0.0",
+  "main": "server.js",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
   }
-  
+}
