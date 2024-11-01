@@ -22,17 +22,21 @@ class SimulatedAnnealing extends MagicCube {
 
             const result = await response.json();
             console.log('Hasil solusi dari server:', result);
-            const { solvedCube, h_before, h_after, algoritma, n_iter } = result;
+            const { solvedCube, h_before, h_after, algoritma, n_iter ,h_values,execution_time} = result;
             this.solvedCubeState = solvedCube; 
             this.animationProgress = 0;
 
             this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
             this.visualizeCube(this.solvedCubeState, true);
+            this.plotObjectiveFunction(h_values);
+
 
             document.getElementById('hBeforeValue').innerText = h_before;
             document.getElementById('hAfterValue').innerText = h_after;
-            document.getElementById('algoritma').innerText = algoritma;
-            document.getElementById('iterasi').innerText = n_iter;
+            document.getElementById('algoritmaSpan').innerText = algoritma;
+            document.getElementById('iterasiSpan').innerText = n_iter;
+            document.getElementById('waktuEksekusiSpan').innerText = execution_time;
+
 
         } catch (error) {
             console.error('Error:', error);

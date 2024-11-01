@@ -106,6 +106,7 @@ class Cube {
                     currentH = newH; 
                 } else {
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+
                 }
                 this.iterasi++;
             }
@@ -138,6 +139,8 @@ class Cube {
                 }
                 Tvalue *= coolingRate;
                 this.iterasi++;
+                this.hValues.push(currentH);
+
             }
         } while (this.iterasi<maxIterations); 
         return this.cube;
@@ -169,7 +172,11 @@ export function solveSteepHC(req, res) {
     const magicCube = new Cube(cubeState.length, cubeState); 
     const objFuncBefore = magicCube.getObjective();
 
+    const startTime = Date.now();  
     const solvedCube = magicCube.steepestAscentHillClimbing();
+    const endTime = Date.now(); 
+    const executionTime = endTime - startTime; 
+
     const objFuncAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
     const iter = magicCube.getIterasi();
@@ -185,7 +192,8 @@ export function solveSteepHC(req, res) {
         h_before: objFuncBefore,
         h_after: objFuncAfter,
         magic_number: magicnum,
-        h_values: hValues 
+        h_values: hValues,
+        execution_time: executionTime 
     });
 }
 
@@ -205,9 +213,16 @@ export function solveSimulatedAnnealing(req, res) {
     const magicCube = new Cube(cubeState.length, cubeState); 
     const objFuncBefore = magicCube.getObjective();
 
+    const startTime = Date.now();  
     const solvedCube = magicCube.simulatedAnnealing();
+    const endTime = Date.now(); 
+
+    const executionTime = endTime - startTime; 
+
     const objFunctAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
+    const hValues = magicCube.getHValues(100);  //ambil tiap 100 iterasi, kalo semua ngelag
+
     const iter = magicCube.getIterasi();
 
     res.json({
@@ -217,7 +232,11 @@ export function solveSimulatedAnnealing(req, res) {
         solvedCube,
         h_before: objFuncBefore,
         h_after:objFunctAfter,
-        magic_number: magicnum
+        magic_number: magicnum,
+        h_values: hValues,
+        execution_time: executionTime 
+
+
 
     });
 }
