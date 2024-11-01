@@ -242,7 +242,6 @@ export function solveSimulatedAnnealing(req, res) {
     const iter = magicCube.getIterasi();
     const e_values = magicCube.getEValues();
     const stuck_freq = magicCube.getStuckFreq();
-    const hValues = magicCube.getHValues(100);
     const iter_values = [];
     for(let i =1; i<= iter; i++){
         iter_values.push(i);
