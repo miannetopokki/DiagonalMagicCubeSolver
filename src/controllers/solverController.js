@@ -7,6 +7,9 @@ class Cube {
         this.iterasi = 0;
         this.hValues = [];
         this.sequensElement = [];
+        this.hValues = []; 
+        this.e_values = [];
+        this.stuck_freq = 0;
     }
 
     objectiveFunction() {
@@ -125,7 +128,6 @@ class Cube {
         let Tvalue = 1000;
         const coolingRate = 0.95;
         const maxIterations = 50000;
-
         do {
             let i = Math.floor(Math.random() * 5);
             let j = Math.floor(Math.random() * 5);
@@ -139,15 +141,23 @@ class Cube {
                 [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                 let newH = this.objectiveFunction();
                 let diffH = currentH - newH;
-                if (newH < currentH || Math.exp(diffH / Tvalue) > 0.5) {
+                const e_prob = Math.exp(diffH/Tvalue);
+                if (newH < currentH) {
                     currentH = newH;
-                } else {
+                } else if(Math.exp(diffH/Tvalue)>0.5){
+                    currentH = newH;
+                    this.stuck_freq++;
+                }else{
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                 }
-                Tvalue *= coolingRate;
                 this.iterasi++;
-                this.hValues.push(currentH);
-
+                this.hValues.push(newH);
+                if(diffH>0){
+                    this.e_values.push(0);
+                }else{
+                    this.e_values.push(Math.exp((diffH)/Tvalue));
+                }
+                Tvalue *= coolingRate;
             }
         } while (this.iterasi < maxIterations);
         return this.cube;
@@ -161,11 +171,16 @@ class Cube {
     getIterasi() {
         return this.iterasi;
     }
-    getHValues() {
-        // return this.hValues.filter((_, index) => index % step === 0);
-        return this.hValues;
+    getHValues(step = 100) {
+        return this.hValues.filter((_, index) => index % step === 0);
     }
-    getSeqElement() {
+    getEValues(){
+        return this.e_values;
+    }
+    getStuckFreq(){
+        return this.stuck_freq;
+    }
+    getSeqElement(){
         return this.sequensElement;
     }
 }
@@ -237,6 +252,12 @@ export function solveSimulatedAnnealing(req, res) {
     const hValues = magicCube.getHValues(100);  //ambil tiap 100 iterasi, kalo semua ngelag
 
     const iter = magicCube.getIterasi();
+    const e_values = magicCube.getEValues();
+    const stuck_freq = magicCube.getStuckFreq();
+    const iter_values = [];
+    for(let i =1; i<= iter; i++){
+        iter_values.push(i);
+    }
 
     res.json({
         message: "Kubus berhasil diselesaikan",
@@ -251,5 +272,9 @@ export function solveSimulatedAnnealing(req, res) {
 
 
 
+        e_values : e_values,
+        iter_values : iter_values,
+        stuck_freq : stuck_freq,
+        h_values: hValues 
     });
 }

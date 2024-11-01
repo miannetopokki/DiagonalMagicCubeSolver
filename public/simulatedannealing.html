@@ -11,6 +11,7 @@
 
     <script src="js/magicCube.js" type="module"></script>
     <script src="js/simulatedAnnealing.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -60,11 +61,10 @@
                 <p id="iterasi">Iterations: <span id="iterasiSpan">-</span></p>
                 <p id="waktuEksekusi">Waktu Eksekusi: <span id="waktuEksekusiSpan">-</span> ms</p>
 
+                <p id="stuck_freq">Stuck Frequency: <span id="stuck_freq">-</span></p>
             </section>
-        </div>
-        <div>
-            asdd
-            <canvas id="objectiveFunctionChart" width="400" height="200"></canvas>
+            <canvas id="objectiveFunctionChart"></canvas>
+            <canvas id="annealingChart"></canvas>
         </div>
     </section>
 </body>
