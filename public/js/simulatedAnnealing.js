@@ -22,7 +22,7 @@ class SimulatedAnnealing extends MagicCube {
 
             const result = await response.json();
             console.log('Hasil solusi dari server:', result);
-            const { solvedCube, h_before, h_after, algoritma, n_iter } = result;
+            const { solvedCube, h_before, h_after, algoritma, n_iter, h_values, e_values, stuck_freq } = result;
             this.solvedCubeState = solvedCube; 
             this.animationProgress = 0;
 
@@ -32,7 +32,63 @@ class SimulatedAnnealing extends MagicCube {
             document.getElementById('hBeforeValue').innerText = h_before;
             document.getElementById('hAfterValue').innerText = h_after;
             document.getElementById('algoritma').innerText = algoritma;
-            document.getElementById('iterasi').innerText = n_iter;
+            document.getElementById('iterasi').innerText = `Iterasi : ${n_iter}`;
+            document.getElementById('stuck_freq').innerText = `stuck_freq : ${stuck_freq}`;
+            const annealingctx = document.getElementById('annealingChart').getContext('2d');
+            const ObjectiveChart = document.getElementById('objectiveFunctionChart').getContext('2d');
+            const annealingChart = new Chart(annealingctx, {
+                type: 'line',
+                data: {
+                    labels:  Array.from({ length: e_values.length }, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'e^(ΔH / T) over Iterations',
+                        data: e_values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderWidth: 1,
+                        fill: true,
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            title: {
+                                display: true,
+                                text: 'Iteration'
+                            }
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'e^(ΔH / T)'
+                            },
+                            min: 0,
+                            max: 1,
+                        }
+                    }
+                }
+            });
+            const ctx = document.getElementById('objectiveFunctionChart').getContext('2d');
+    
+            new Chart(ObjectiveChart, {
+                type: 'line',
+                data: {
+                    labels: Array.from({ length: h_values.length }, (_, i) => i + 1),
+                    datasets: [{
+                        label: 'Objective Function (h) per 100 Iteration',
+                        data: h_values,
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        fill: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        x: { title: { display: true, text: 'Iteration' } },
+                        y: { title: { display: true, text: 'Objective Function (h)' } }
+                    }
+                }
+            });
 
         } catch (error) {
             console.error('Error:', error);

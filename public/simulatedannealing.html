@@ -9,6 +9,7 @@
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="js/magicCube.js" type="module"></script>
     <script src="js/simulatedAnnealing.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -56,7 +57,10 @@
                 <p id="hAfterText">H After: <span id="hAfterValue">-</span></p>
                 <p id="algoritma">Algorithm: <span id="algoritma">-</span></p>
                 <p id="iterasi">Iterations: <span id="iterasi">-</span></p>
+                <p id="stuck_freq">Stuck Frequency: <span id="stuck_freq">-</span></p>
             </section>
+            <canvas id="objectiveFunctionChart"></canvas>
+            <canvas id="annealingChart"></canvas>
         </div>
     </section>
 </body>
