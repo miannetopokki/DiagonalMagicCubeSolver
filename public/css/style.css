@@ -30,7 +30,7 @@ body {
     border-radius: 4px;
 }
 
-h1 {
+h1,h2 {
     font-size: 1.5em;
     text-align: center;
     color: #333;
@@ -60,7 +60,8 @@ h1 {
 }
 
 #cubeContainer,
-#solvedCubeContainer {
+#solvedCubeContainer,
+#replayCubeContainer {
     width: 100%;
     height: auto;
     border: 1px solid #ddd;

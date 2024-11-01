@@ -23,12 +23,13 @@ class HillClimb extends MagicCube {
 
             const result = await response.json();
             console.log('Hasil solusi dari server:', result);
-            const { solvedCube, h_before, h_after, algoritma, n_iter,h_values,execution_time } = result;
+            const { solvedCube,seq_elemen, h_before, h_after, algoritma, n_iter,h_values,execution_time } = result;
             this.solvedCubeState = solvedCube; 
             this.animationProgress = 0;
+            this.sequensElement = seq_elemen;
 
             this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
-            this.visualizeCube(this.solvedCubeState, true);
+            this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
 
             this.plotObjectiveFunction(h_values);
 
@@ -37,6 +38,8 @@ class HillClimb extends MagicCube {
             document.getElementById('algoritmaSpan').innerText = algoritma;
             document.getElementById('iterasiSpan').innerText = n_iter;
             document.getElementById('waktuEksekusiSpan').innerText = execution_time;
+            document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
+
 
         } catch (error) {
             console.error('Error:', error);
@@ -56,6 +59,12 @@ class HillClimb extends MagicCube {
 }
 
 const hillClimbInstance = new HillClimb(); 
+
+document.getElementById('replay').addEventListener('click', () => {
+    console.log("replay");
+   hillClimbInstance.animateCubeMovement();
+});
+
 
 document.getElementById('addX').addEventListener('click', () => {
     hillClimbInstance.changeXSpace(true);
@@ -79,7 +88,14 @@ document.getElementById('minusY').addEventListener('click', () => {
 });
 
 
-
+// Event listener untuk slider
+const slider = document.getElementById('iterationSlider');
+const currentIterationLabel = document.getElementById('currentIteration');
+slider.addEventListener('input', (event) => {
+    const iteration = parseInt(event.target.value);
+    currentIterationLabel.textContent = iteration; // Update label iterasi
+    updateAnimation(iteration); // Panggil fungsi untuk memperbarui animasi
+});
 
 
 document.getElementById('addZ').addEventListener('click', () => {

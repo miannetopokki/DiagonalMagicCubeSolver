@@ -1,15 +1,16 @@
 class Cube {
     constructor(size, cubeState) {
-        this.n = size; 
+        this.n = size;
         this.magicNumber = (this.n * (Math.pow(this.n, 3) + 1)) / 2;
-        this.cube = cubeState; 
-        this.h = 0; 
+        this.cube = cubeState;
+        this.h = 0;
         this.iterasi = 0;
-        this.hValues = []; 
+        this.hValues = [];
+        this.sequensElement = [];
     }
 
     objectiveFunction() {
-        this.h = 0; 
+        this.h = 0;
         for (let i = 0; i < this.n; i++) {
             for (let j = 0; j < this.n; j++) {
                 let rowSum = 0;
@@ -59,27 +60,33 @@ class Cube {
                             for (let y = 0; y < this.n; y++) {
                                 for (let z = 0; z < this.n; z++) {
                                     if (i !== x || j !== y || k !== z) {
+                                        //tuker
                                         [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+
                                         let newH = this.objectiveFunction();
 
                                         if (newH < currentH) {
                                             currentH = newH;
-                                            improved = true; 
-                                        } else { // newH >= currentH
-                                            
-                                            [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                                            improved = true;
+                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                            this.hValues.push(currentH * (-1));
                                             this.iterasi++;
-                                            this.hValues.push(currentH);
+
+
+                                        } else { // newH >= currentH
+                                            //balikin
+                                            [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                                            // Selesai 1 iterasi, simpan nilai h
                                         }
                                     }
                                 }
                             }
                         }
+
                     }
                 }
             }
-            //beres 1 iter
-        } while (improved); 
+        } while (improved);
 
         return this.cube;
     }
@@ -103,14 +110,14 @@ class Cube {
                 let newH = this.objectiveFunction();
                 let diffH = currentH - newH;
                 if (newH < currentH) {
-                    currentH = newH; 
+                    currentH = newH;
                 } else {
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
 
                 }
                 this.iterasi++;
             }
-        } while (this.iterasi<maxIterations); 
+        } while (this.iterasi < maxIterations);
         return this.cube;
     }
     simulatedAnnealing() {
@@ -132,7 +139,7 @@ class Cube {
                 [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                 let newH = this.objectiveFunction();
                 let diffH = currentH - newH;
-                if (newH < currentH || Math.exp(diffH/Tvalue)>0.5) {
+                if (newH < currentH || Math.exp(diffH / Tvalue) > 0.5) {
                     currentH = newH;
                 } else {
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
@@ -142,25 +149,29 @@ class Cube {
                 this.hValues.push(currentH);
 
             }
-        } while (this.iterasi<maxIterations); 
+        } while (this.iterasi < maxIterations);
         return this.cube;
     }
-    getObjective(){
+    getObjective() {
         return this.objectiveFunction();
     }
-    getMagicNumber(){
+    getMagicNumber() {
         return this.magicNumber;
     }
-    getIterasi(){
+    getIterasi() {
         return this.iterasi;
     }
-    getHValues(step = 100) {
-        return this.hValues.filter((_, index) => index % step === 0);
+    getHValues() {
+        // return this.hValues.filter((_, index) => index % step === 0);
+        return this.hValues;
+    }
+    getSeqElement() {
+        return this.sequensElement;
     }
 }
 
 export function solveSteepHC(req, res) {
-    const { cubeState } = req.body; 
+    const { cubeState } = req.body;
 
     if (!cubeState || !Array.isArray(cubeState)) {
         return res.status(400).json({
@@ -169,19 +180,20 @@ export function solveSteepHC(req, res) {
         });
     }
 
-    const magicCube = new Cube(cubeState.length, cubeState); 
+    const magicCube = new Cube(cubeState.length, cubeState);
     const objFuncBefore = magicCube.getObjective();
 
-    const startTime = Date.now();  
+    const startTime = Date.now();
     const solvedCube = magicCube.steepestAscentHillClimbing();
-    const endTime = Date.now(); 
-    const executionTime = endTime - startTime; 
+    const endTime = Date.now();
+    const executionTime = endTime - startTime;
 
     const objFuncAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
     const iter = magicCube.getIterasi();
+    const sequensElement = magicCube.getSeqElement();
 
-    const hValues = magicCube.getHValues(100);  //ambil tiap 100 iterasi, kalo semua ngelag
+    const hValues = magicCube.getHValues();  //ambil tiap 100 iterasi, kalo semua ngelag
 
 
     res.json({
@@ -193,7 +205,8 @@ export function solveSteepHC(req, res) {
         h_after: objFuncAfter,
         magic_number: magicnum,
         h_values: hValues,
-        execution_time: executionTime 
+        execution_time: executionTime,
+        seq_elemen: sequensElement
     });
 }
 
@@ -201,7 +214,7 @@ export function solveSteepHC(req, res) {
 
 
 export function solveSimulatedAnnealing(req, res) {
-    const { cubeState } = req.body; 
+    const { cubeState } = req.body;
 
     if (!cubeState || !Array.isArray(cubeState)) {
         return res.status(400).json({
@@ -210,14 +223,14 @@ export function solveSimulatedAnnealing(req, res) {
         });
     }
 
-    const magicCube = new Cube(cubeState.length, cubeState); 
+    const magicCube = new Cube(cubeState.length, cubeState);
     const objFuncBefore = magicCube.getObjective();
 
-    const startTime = Date.now();  
+    const startTime = Date.now();
     const solvedCube = magicCube.simulatedAnnealing();
-    const endTime = Date.now(); 
+    const endTime = Date.now();
 
-    const executionTime = endTime - startTime; 
+    const executionTime = endTime - startTime;
 
     const objFunctAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
@@ -231,10 +244,10 @@ export function solveSimulatedAnnealing(req, res) {
         n_iter: iter,
         solvedCube,
         h_before: objFuncBefore,
-        h_after:objFunctAfter,
+        h_after: objFunctAfter,
         magic_number: magicnum,
         h_values: hValues,
-        execution_time: executionTime 
+        execution_time: executionTime
 
 
 
