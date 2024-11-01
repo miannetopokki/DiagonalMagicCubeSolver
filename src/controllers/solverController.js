@@ -268,13 +268,9 @@ export function solveSimulatedAnnealing(req, res) {
         h_after: objFunctAfter,
         magic_number: magicnum,
         h_values: hValues,
-        execution_time: executionTime
-
-
-
+        execution_time: executionTime,
         e_values : e_values,
         iter_values : iter_values,
         stuck_freq : stuck_freq,
-        h_values: hValues 
     });
 }
