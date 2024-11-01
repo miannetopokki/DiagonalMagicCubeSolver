@@ -171,7 +171,7 @@ class Cube {
     getIterasi() {
         return this.iterasi;
     }
-    getHValues(step = 100) {
+    getHValues(step = 0) {
         return this.hValues.filter((_, index) => index % step === 0);
     }
     getEValues(){
@@ -208,7 +208,7 @@ export function solveSteepHC(req, res) {
     const iter = magicCube.getIterasi();
     const sequensElement = magicCube.getSeqElement();
 
-    const hValues = magicCube.getHValues();  //ambil tiap 100 iterasi, kalo semua ngelag
+    const hValues = magicCube.getHValues(1);  //ambil tiap 100 iterasi, kalo semua ngelag
 
 
     res.json({

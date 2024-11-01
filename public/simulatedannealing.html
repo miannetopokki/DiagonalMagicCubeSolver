@@ -63,6 +63,21 @@
 
                 <p id="stuck_freq">Stuck Frequency: <span id="stuck_freq">-</span></p>
             </section>
+            <div class="cube-item">
+                <h2>Replay</h2>
+                <div>
+                    <section class="desc-container">
+                        <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
+                        <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
+        
+                    </section>
+                </div>
+                <div id="replayCubeContainer">
+    
+                </div>
+    
+            </div>
+            <div>
             <canvas id="objectiveFunctionChart"></canvas>
             <canvas id="annealingChart"></canvas>
         </div>
