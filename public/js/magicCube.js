@@ -35,6 +35,8 @@ class MagicCube {
         this.targetPosition = new THREE.Vector3(5, 5, 12);
 
         this.sequensElement = [];
+        this.replayDurasi = 500;
+        this.speedUpDurasi = this.replayDurasi;
         this.nsequence = 0;
         this.cubePositions = {}; // Initialize an object to track cube positions
 
@@ -203,12 +205,12 @@ class MagicCube {
 
                 const nilai1 = sequence[2][0];
                 const nilai2 = sequence[2][1];
-                const layerindex1 = sequence[0][0];
-                const layerindex2 = sequence[1][0];
-                const cube1x = sequence[0][1];
-                const cube1y = sequence[0][2];
-                const cube2x = sequence[1][1];
-                const cube2y = sequence[1][2];
+                // const layerindex1 = sequence[0][0];
+                // const layerindex2 = sequence[1][0];
+                // const cube1x = sequence[0][1];
+                // const cube1y = sequence[0][2];
+                // const cube2x = sequence[1][1];
+                // const cube2y = sequence[1][2];
 
                 
 
@@ -219,24 +221,24 @@ class MagicCube {
                 const cube2 = this.replayscene.getObjectByName(cube2Key);
 
                 if (cube1 && cube2) {
-                    const tempcube1 = cube1;
-                    tempcube1.position.set((this.x_offset * cube1y * this.space), (this.y_offset * cube1x * this.space), this.z_offset * layerindex1);
+                    // const tempcube1 = cube1;
+                    // tempcube1.position.set((this.x_offset * cube1y * this.space), (this.y_offset * cube1x * this.space), this.z_offset * layerindex1);
 
-                    const tempcube2 = cube2;
-                    tempcube2.position.set((this.x_offset * cube2y * this.space), (this.y_offset * cube2x * this.space), this.z_offset * layerindex2);
+                    // const tempcube2 = cube2;
+                    // tempcube2.position.set((this.x_offset * cube2y * this.space), (this.y_offset * cube2x * this.space), this.z_offset * layerindex2);
 
 
                     // console.log("iter",index);
-                    const originalPosition1 = tempcube1.position.clone();
+                    const originalPosition1 = cube1.position.clone();
                     // console.log(cube1.position,originalPosition1);
-                    const originalPosition2 = tempcube2.position.clone();
+                    const originalPosition2 = cube2.position.clone();
                     // console.log(cube2.position,originalPosition2);
 
 
                     cube1.material.color.set(0xff0000); 
                     cube2.material.color.set(0x0000ff);
 
-                    const duration = 5; 
+                    const duration = this.speedUpDurasi / 5; 
                     const startTime = performance.now();
 
                     const animate = (currentTime) => {
@@ -266,7 +268,7 @@ class MagicCube {
                     isAnimating = false;
                     return;
                 }
-            }, index * 50); 
+            }, index * this.speedUpDurasi); 
         });
     }
 

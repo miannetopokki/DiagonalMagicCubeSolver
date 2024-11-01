@@ -56,16 +56,36 @@ class HillClimb extends MagicCube {
         this.solveSteepHC(this.cubeState); 
         this.isSolved = true; 
     }
+    getSeqElementLength(){
+        return this.sequensElement.length;
+    }
+    setSpeedDurasi(speed){
+        console.log("Speed = ", speed ,"x");
+        this.speedUpDurasi = this.replayDurasi / speed;
+    }
 }
 
 const hillClimbInstance = new HillClimb(); 
 
-document.getElementById('replay').addEventListener('click', () => {
-    console.log("replay");
-   hillClimbInstance.animateCubeMovement();
+
+const replayButton = document.getElementById("replay");
+replayButton.addEventListener("click", onReplayButtonClick.bind(this));
+function onReplayButtonClick() {
+    console.log(hillClimbInstance.getSeqElementLength());
+    if (hillClimbInstance.getSeqElementLength() === 0) {
+        alert(" Tidak ada replay yang dapat dilakukan,Silahkan solve dulu.");
+        return; 
+    }
+
+    hillClimbInstance.animateCubeMovement();
+}
+const speedSlider = document.getElementById("speedSlider");
+const currentSpeedLabel = document.getElementById("currentSpeed");
+speedSlider.addEventListener("input", (event) => {
+    const speedValue = event.target.value;
+    hillClimbInstance.setSpeedDurasi(speedValue);
+    currentSpeedLabel.textContent = speedValue; // Perbarui label tampilan
 });
-
-
 document.getElementById('addX').addEventListener('click', () => {
     hillClimbInstance.changeXSpace(true);
 });
