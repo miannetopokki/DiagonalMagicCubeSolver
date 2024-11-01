@@ -5,6 +5,7 @@ class Cube {
         this.cube = cubeState; 
         this.h = 0; 
         this.iterasi = 0;
+        this.hValues = []; 
     }
 
     objectiveFunction() {
@@ -64,10 +65,11 @@ class Cube {
                                         if (newH < currentH) {
                                             currentH = newH;
                                             improved = true; 
-                                        } else {
+                                        } else { // newH >= currentH
                                             
                                             [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                                             this.iterasi++;
+                                            this.hValues.push(currentH);
                                         }
                                     }
                                 }
@@ -76,6 +78,7 @@ class Cube {
                     }
                 }
             }
+            //beres 1 iter
         } while (improved); 
 
         return this.cube;
@@ -148,6 +151,9 @@ class Cube {
     getIterasi(){
         return this.iterasi;
     }
+    getHValues(step = 100) {
+        return this.hValues.filter((_, index) => index % step === 0);
+    }
 }
 
 export function solveSteepHC(req, res) {
@@ -164,9 +170,12 @@ export function solveSteepHC(req, res) {
     const objFuncBefore = magicCube.getObjective();
 
     const solvedCube = magicCube.steepestAscentHillClimbing();
-    const objFunctAfter = magicCube.getObjective();
+    const objFuncAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
     const iter = magicCube.getIterasi();
+
+    const hValues = magicCube.getHValues(100);  //ambil tiap 100 iterasi, kalo semua ngelag
+
 
     res.json({
         message: "Kubus berhasil diselesaikan",
@@ -174,11 +183,15 @@ export function solveSteepHC(req, res) {
         n_iter: iter,
         solvedCube,
         h_before: objFuncBefore,
-        h_after:objFunctAfter,
-        magic_number: magicnum
-
+        h_after: objFuncAfter,
+        magic_number: magicnum,
+        h_values: hValues 
     });
 }
+
+
+
+
 export function solveSimulatedAnnealing(req, res) {
     const { cubeState } = req.body; 
 

@@ -5,6 +5,7 @@ class HillClimb extends MagicCube {
     constructor() {
         super();
     }
+    
 
     async solveSteepHC(cubeState) { 
         try {
@@ -22,12 +23,14 @@ class HillClimb extends MagicCube {
 
             const result = await response.json();
             console.log('Hasil solusi dari server:', result);
-            const { solvedCube, h_before, h_after, algoritma, n_iter } = result;
+            const { solvedCube, h_before, h_after, algoritma, n_iter,h_values } = result;
             this.solvedCubeState = solvedCube; 
             this.animationProgress = 0;
 
             this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
             this.visualizeCube(this.solvedCubeState, true);
+
+            this.plotObjectiveFunction(h_values);
 
             document.getElementById('hBeforeValue').innerText = h_before;
             document.getElementById('hAfterValue').innerText = h_after;

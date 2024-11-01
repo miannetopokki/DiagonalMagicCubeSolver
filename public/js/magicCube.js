@@ -26,6 +26,29 @@ class MagicCube {
         this.initializeScene();
         this.initializeSolvedCubeScene();
     }
+    plotObjectiveFunction(hValues) {
+        const ctx = document.getElementById('objectiveFunctionChart').getContext('2d');
+    
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: hValues.length }, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Objective Function (h) per 100 Iteration',
+                    data: hValues,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: { title: { display: true, text: 'Iteration' } },
+                    y: { title: { display: true, text: 'Objective Function (h)' } }
+                }
+            }
+        });
+    }
 
     initializeScene() {
         this.scene = new THREE.Scene();
