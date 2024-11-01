@@ -6,6 +6,7 @@ class Cube {
         this.h = 0; 
         this.iterasi = 0;
         this.hValues = []; 
+        this.hValues = []; 
         this.e_values = [];
         this.stuck_freq = 0;
     }
@@ -67,7 +68,7 @@ class Cube {
                                         if (newH < currentH) {
                                             currentH = newH;
                                             improved = true; 
-                                        } else {
+                                        } else { // newH >= currentH
                                             
                                             [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                                             this.iterasi++;
@@ -80,6 +81,7 @@ class Cube {
                     }
                 }
             }
+            //beres 1 iter
         } while (improved); 
 
         return this.cube;
@@ -107,6 +109,7 @@ class Cube {
                     currentH = newH; 
                 } else {
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+
                 }
                 this.iterasi++;
             }
@@ -185,10 +188,17 @@ export function solveSteepHC(req, res) {
     const magicCube = new Cube(cubeState.length, cubeState); 
     const objFuncBefore = magicCube.getObjective();
 
+    const startTime = Date.now();  
     const solvedCube = magicCube.steepestAscentHillClimbing();
-    const objFunctAfter = magicCube.getObjective();
+    const endTime = Date.now(); 
+    const executionTime = endTime - startTime; 
+
+    const objFuncAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
     const iter = magicCube.getIterasi();
+
+    const hValues = magicCube.getHValues(100);  //ambil tiap 100 iterasi, kalo semua ngelag
+
 
     res.json({
         message: "Kubus berhasil diselesaikan",
@@ -196,11 +206,16 @@ export function solveSteepHC(req, res) {
         n_iter: iter,
         solvedCube,
         h_before: objFuncBefore,
-        h_after:objFunctAfter,
-        magic_number: magicnum
-
+        h_after: objFuncAfter,
+        magic_number: magicnum,
+        h_values: hValues,
+        execution_time: executionTime 
     });
 }
+
+
+
+
 export function solveSimulatedAnnealing(req, res) {
     const { cubeState } = req.body; 
 
@@ -214,9 +229,16 @@ export function solveSimulatedAnnealing(req, res) {
     const magicCube = new Cube(cubeState.length, cubeState); 
     const objFuncBefore = magicCube.getObjective();
 
+    const startTime = Date.now();  
     const solvedCube = magicCube.simulatedAnnealing();
+    const endTime = Date.now(); 
+
+    const executionTime = endTime - startTime; 
+
     const objFunctAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
+    const hValues = magicCube.getHValues(100);  //ambil tiap 100 iterasi, kalo semua ngelag
+
     const iter = magicCube.getIterasi();
     const e_values = magicCube.getEValues();
     const stuck_freq = magicCube.getStuckFreq();
