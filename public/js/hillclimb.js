@@ -1,13 +1,16 @@
 // hillclimb.js
 import { MagicCube } from './magicCube.js';
 
+let index = 0;
 class HillClimb extends MagicCube {
     constructor() {
         super();
     }
     
 
+
     async solveSteepHC(cubeState) { 
+   
         try {
             const response = await fetch('/api/steephc', {
                 method: 'POST',
@@ -49,11 +52,53 @@ class HillClimb extends MagicCube {
 
     }
     async solveRandomRestartHC(cubeState){
+      
+        try {
+            const response = await fetch('/api/randomrestartHC', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cubeState })
+            });
 
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Hasil solusi dari server:', result);
+            const { solvedCube,seq_elemen, h_before, h_after, algoritma, n_iter,h_values,execution_time } = result;
+            this.solvedCubeState = solvedCube; 
+            this.animationProgress = 0;
+            this.sequensElement = seq_elemen;
+
+            this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
+            this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
+
+            this.plotObjectiveFunction(h_values);
+
+            document.getElementById('hBeforeValue').innerText = h_before;
+            document.getElementById('hAfterValue').innerText = h_after;
+            document.getElementById('algoritmaSpan').innerText = algoritma;
+            document.getElementById('iterasiSpan').innerText = n_iter;
+            document.getElementById('waktuEksekusiSpan').innerText = execution_time;
+            document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
+
+
+        } catch (error) {
+            console.error('Error:', error);
+        }
     }
 
-    solveCube() {
-        this.solveSteepHC(this.cubeState); 
+    solveCube(index) {
+    
+        if (index == 1){
+            this.solveSteepHC(this.cubeState);
+        }
+        else if(index == 2){
+            this.solveRandomRestartHC(this.cubeState);
+        }
         this.isSolved = true; 
     }
     getSeqElementLength(){
@@ -128,9 +173,20 @@ document.getElementById('minusZ').addEventListener('click', () => {
 
 });
 
+function handleSelection(value) {
+    if (value === "1") {
+        // Panggil fungsi atau kode khusus untuk value 1 (Hill Climb)
+        index = 1;
+    } else if (value === "2") {
+        index = 2;
+    }
+}
+
+window.handleSelection = handleSelection;
+
 
 document.getElementById('solveCubeButton').addEventListener('click', () => {
-    hillClimbInstance.solveCube();
+    hillClimbInstance.solveCube(index);
 });
 document.getElementById('gridButton').addEventListener('click', () => {
     hillClimbInstance.addGrid();

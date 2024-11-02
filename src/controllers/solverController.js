@@ -162,6 +162,70 @@ class Cube {
         } while (this.iterasi < maxIterations);
         return this.cube;
     }
+
+    randomRestartHillClimbing() {
+        const maxRestart = 100;
+        let best_h = this.getObjective(); // Start with the current h
+        let best_cube = this.cube; // Start with the current cube
+        
+        console.log("Initial Best H: ", best_h);
+    
+        for (let i = 0; i < maxRestart; i++) {
+            console.log(this.n);
+            const newCube = new Cube(this.n, this.generateMagicCubeState(this.n));
+            
+            // console.log("Generated Cube: ", newCube.cube);
+    
+            newCube.steepestAscentHillClimbing();
+            
+            let currentH = newCube.getH();
+            this.hValues.push(currentH);
+            console.log(`Iteration ${i}: Current H = ${currentH}, Best H = ${best_h}`);
+            
+            if (currentH < best_h) {
+                best_h = currentH;
+                best_cube = newCube.cube; // Copy the best cube found
+                console.log("New Best Found: ", best_h);
+            }
+        }
+        
+        this.cube = best_cube; // Set the best cube found
+        return this.cube;
+    }
+    
+    ///Fungsi untuk membuat magic cube state secara random
+    generateMagicCubeState(n) {
+        const totalNumbers = n * n * n;
+        const numbers = Array.from({ length: totalNumbers }, (_, i) => i + 1);
+    
+      
+        for (let i = numbers.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [numbers[i], numbers[j]] = [numbers[j], numbers[i]];
+        }
+    
+        const cubeState = Array.from({ length: n }, () =>
+            Array.from({ length: n }, () => Array(n).fill(0))
+        );
+    
+        let index = 0;
+        for (let i = 0; i < n; i++) {
+            for (let j = 0; j < n; j++) {
+                for (let k = 0; k < n; k++) {
+                    cubeState[i][j][k] = numbers[index++];
+                }
+            }
+        } 
+        return cubeState;
+    }
+    
+    
+    
+    getH(){
+        return this.h;
+    }
+
+
     getObjective() {
         return this.objectiveFunction();
     }
@@ -272,5 +336,47 @@ export function solveSimulatedAnnealing(req, res) {
         e_values : e_values,
         iter_values : iter_values,
         stuck_freq : stuck_freq,
+    });
+}
+
+export function solveRandomRestartHC(req, res) {
+    const { cubeState } = req.body;
+
+    if (!cubeState || !Array.isArray(cubeState)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid cube state provided"
+        });
+    }
+
+    const magicCube = new Cube(cubeState.length, cubeState);
+    const objFuncBefore = magicCube.getObjective();
+
+    const startTime = Date.now();
+    const solvedCube = magicCube.randomRestartHillClimbing();
+    const endTime = Date.now();
+    const executionTime = endTime - startTime;
+
+    const objFuncAfter = magicCube.getObjective();
+    const magicnum = magicCube.getMagicNumber();
+    const iter = magicCube.getIterasi();
+    const sequensElement = magicCube.getSeqElement();
+
+
+    const hValues = magicCube.getHValues(1);
+    const iterValues = Array.from({ length: hValues.length }, (_, i) => i + 1); 
+
+    res.json({
+        message: "Cube successfully solved",
+        algorithm: "Random Restart Hill Climb",
+        n_iter: iter,
+        solvedCube,
+        h_before: objFuncBefore,
+        h_after: objFuncAfter,
+        magic_number: magicnum,
+        h_values: hValues,
+        execution_time: executionTime,
+        seq_element: sequensElement,
+        iter_values: iterValues // Include iteration values for plotting
     });
 }
