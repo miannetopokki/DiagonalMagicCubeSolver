@@ -218,6 +218,58 @@ class Cube {
         } 
         return cubeState;
     }
+
+    sidewaysmoveHillClimbing() {
+        let currentH = this.objectiveFunction();
+        let improved;
+     
+    
+        do {
+            improved = false;
+         
+    
+            for (let i = 0; i < this.n; i++) {
+                for (let j = 0; j < this.n; j++) {
+                    for (let k = 0; k < this.n; k++) {
+                        for (let x = 0; x < this.n; x++) {
+                            for (let y = 0; y < this.n; y++) {
+                                for (let z = 0; z < this.n; z++) {
+                                    if (i !== x || j !== y || k !== z) {
+                                        // Swap elements
+                                        [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+    
+                                        let newH = this.objectiveFunction();
+                                
+                                        
+                                        // If newH is better, accept the change
+                                        if (newH < currentH) {
+                                            currentH = newH;
+                                            improved = true;
+                                          
+                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                            this.hValues.push(currentH * (-1));
+                                            this.iterasi++;
+                                        } else if (newH === currentH) { 
+                                                currentH = newH;
+                                                this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                                this.hValues.push(currentH * (-1));
+                                                this.iterasi++;
+                                        } else { 
+                                            [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+
+        } while (improved);
+    
+        return this.cube;
+    }
+    
     
     
     
@@ -377,6 +429,47 @@ export function solveRandomRestartHC(req, res) {
         h_values: hValues,
         execution_time: executionTime,
         seq_element: sequensElement,
-        iter_values: iterValues // Include iteration values for plotting
+        iter_values: iterValues 
+    });
+}
+
+export function solveSidewaysHC(req, res) {
+    const { cubeState } = req.body;
+
+    if (!cubeState || !Array.isArray(cubeState)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid cube state provided"
+        });
+    }
+
+    const magicCube = new Cube(cubeState.length, cubeState);
+    const objFuncBefore = magicCube.getObjective();
+
+    const startTime = Date.now();
+    console.log ("start sideways");
+    const solvedCube = magicCube.sidewaysmoveHillClimbing();
+    const endTime = Date.now();
+    const executionTime = endTime - startTime;
+
+    const objFuncAfter = magicCube.getObjective();
+    const magicnum = magicCube.getMagicNumber();
+    const iter = magicCube.getIterasi();
+    const sequensElement = magicCube.getSeqElement();
+
+    const hValues = magicCube.getHValues(1);  
+
+
+    res.json({
+        message: "Kubus berhasil diselesaikan",
+        algoritma: "Sideways Hill Climb",
+        n_iter: iter,
+        solvedCube,
+        h_before: objFuncBefore,
+        h_after: objFuncAfter,
+        magic_number: magicnum,
+        h_values: hValues,
+        execution_time: executionTime,
+        seq_elemen: sequensElement
     });
 }
