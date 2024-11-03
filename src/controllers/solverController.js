@@ -101,7 +101,7 @@ class Cube {
                                         if (newH < currentH) {
                                             currentH = newH;
                                             improved = true;
-                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]],currentH]);
                                             this.hValues.push(currentH * (-1));
                                             this.iterasi++;
 
@@ -146,7 +146,7 @@ class Cube {
     
             if (newH < currentH) {
                 currentH = newH;
-                this.sequensElement.push([[x1, y1, z1], [x2, y2, z2], [this.cube[x2][y2][z2], this.cube[x1][y1][z1]]]);
+                this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]],currentH]);
                 this.hValues.push(currentH * (-1));
                 this.iterasi++;
             } else {
@@ -178,10 +178,10 @@ class Cube {
                 const e_prob = Math.exp(diffH/Tvalue);
                 if (newH < currentH) {
                     currentH = newH;
-                    this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                    this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]],currentH]);
                 } else if(Math.exp(diffH/Tvalue)>0.5){
                     currentH = newH;
-                    this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                    this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]],currentH]);
                     this.stuck_freq++;
                 }else{
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
@@ -280,14 +280,14 @@ class Cube {
                                             improved = true;
                                             sidewaysMoves = 0; //Reset counter
                                             
-                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]],currentH]);
                                             this.hValues.push(currentH * (-1));
                                             this.iterasi++;
                                         } else if (newH === currentH && sidewaysMoves < maxSidewaysMoves) { 
                                             currentH = newH;
                                             sidewaysMoves++;
                                             
-                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]],currentH]);
                                             this.hValues.push(currentH * (-1));
                                             this.iterasi++;
                                         } else { 
