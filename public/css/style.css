@@ -219,3 +219,22 @@ button:disabled {
     height: 150px;                /* Height of the loading GIF */
     margin-top: 400px;
 }
+.progress-container {
+    width: 100%;
+    background-color: #eeeeee23;
+    border-radius: 5px;
+    overflow: hidden;
+    margin: 20px 0; /* Space between elements */
+    padding: 5px;
+    max-width: 210px;
+}
+
+.progress-bar {
+    height: 30px;
+    width: 0; /* Initial width */
+    background-color: #4caf50; /* Green color */
+    text-align: center; /* Centered text */
+    line-height: 30px; /* Center text vertically */
+    color: white;
+    transition: width 0.4s ease; /* Smooth transition */
+}

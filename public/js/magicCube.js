@@ -35,10 +35,11 @@ class MagicCube {
         this.targetPosition = new THREE.Vector3(5, 5, 12);
 
         this.sequensElement = [];
-        this.replayDurasi = 500;
+        this.replayDurasi = 1000;
         this.speedUpDurasi = this.replayDurasi;
         this.nsequence = 0;
         this.cubePositions = {}; // Initialize an object to track cube positions
+        this.isReplayed = false;
 
         this.initializeReplayCubeScene();
         this.initializeScene();
@@ -47,12 +48,12 @@ class MagicCube {
     }
     plotObjectiveFunction(hValues) {
         const ctx = document.getElementById('objectiveFunctionChart').getContext('2d');
-    
+
         // Jika chart sudah ada, hancurkan terlebih dahulu
         if (this.objectiveFunctionChart) {
             this.objectiveFunctionChart.destroy();
         }
-    
+
         // Buat chart baru dan simpan referensinya di 'this.objectiveFunctionChart'
         this.objectiveFunctionChart = new Chart(ctx, {
             type: 'line',
@@ -82,7 +83,7 @@ class MagicCube {
             }
         });
     }
-    
+
 
     initializeScene() {
         this.scene = new THREE.Scene();
@@ -194,85 +195,85 @@ class MagicCube {
     }
 
     animateCubeMovement() {
-        let isAnimating = false; 
-        this.sequensElement.forEach((sequence, index) => {
-            setTimeout(() => { 
-                if (isAnimating) return; 
-                isAnimating = true; 
+        return new Promise((resolve) => {  
+            let isAnimating = false;
+            const progressBar = document.getElementById('progressBar');
+            const totalSequences = this.sequensElement.length;
+            let completedAnim = 0;
+            console.log("Sedang replay");
+            
 
-                const nilai1 = sequence[2][0];
-                const nilai2 = sequence[2][1];
-                // const layerindex1 = sequence[0][0];
-                // const layerindex2 = sequence[1][0];
-                // const cube1x = sequence[0][1];
-                // const cube1y = sequence[0][2];
-                // const cube2x = sequence[1][1];
-                // const cube2y = sequence[1][2];
-
-                
-
-                const cube1Key = `${nilai1}`;
-                const cube2Key = `${nilai2}`;
-
-                const cube1 = this.replayscene.getObjectByName(cube1Key);
-                const cube2 = this.replayscene.getObjectByName(cube2Key);
-
-                if (cube1 && cube2) {
-                    // const tempcube1 = cube1;
-                    // tempcube1.position.set((this.x_offset * cube1y * this.space), (this.y_offset * cube1x * this.space), this.z_offset * layerindex1);
-
-                    // const tempcube2 = cube2;
-                    // tempcube2.position.set((this.x_offset * cube2y * this.space), (this.y_offset * cube2x * this.space), this.z_offset * layerindex2);
+            //kalo udah pernah replay sebelumnya
+            if(this.isReplayed){
+                console.log("udah pernah replayed, refresh ke cube awal");
+                this.visualizeCube(this.cubeState,this.replayscene,this.replaycontrols);
+            }
 
 
-                    // console.log("iter",index);
-                    const originalPosition1 = cube1.position.clone();
-                    // console.log(cube1.position,originalPosition1);
-                    const originalPosition2 = cube2.position.clone();
-                    // console.log(cube2.position,originalPosition2);
+            this.sequensElement.forEach((sequence, index) => {
+                setTimeout(() => {
+                    if (isAnimating) return;
+                    isAnimating = true;
 
+                    const nilai1 = sequence[2][0];
+                    const nilai2 = sequence[2][1];
+                    const cube1Key = `${nilai1}`;
+                    const cube2Key = `${nilai2}`;
 
-                    cube1.material.color.set(0xff0000); 
-                    cube2.material.color.set(0x0000ff);
+                    const cube1 = this.replayscene.getObjectByName(cube1Key);
+                    const cube2 = this.replayscene.getObjectByName(cube2Key);
 
-                    const duration = this.speedUpDurasi / 5; 
-                    const startTime = performance.now();
+                    if (cube1 && cube2) {
+                        const originalPosition1 = cube1.position.clone();
+                        const originalPosition2 = cube2.position.clone();
 
-                    const animate = (currentTime) => {
-                        const elapsedTime = currentTime - startTime;
-                        const t = Math.min(elapsedTime / duration, 1); // normalisasi
+                        cube1.material.color.set(0xff0000);
+                        cube2.material.color.set(0x0000ff);
 
+                        const duration = this.speedUpDurasi / 5;
+                        const startTime = performance.now();
 
-                        cube1.position.lerpVectors(originalPosition1, originalPosition2, t);
-                        cube2.position.lerpVectors(originalPosition2, originalPosition1, t);
+                        const animate = (currentTime) => {
+                            const elapsedTime = currentTime - startTime;
+                            const t = Math.min(elapsedTime / duration, 1); // Normalize
 
+                            cube1.position.lerpVectors(originalPosition1, originalPosition2, t);
+                            cube2.position.lerpVectors(originalPosition2, originalPosition1, t);
 
-                        if (t < 1) {
-                            requestAnimationFrame(animate);
-                        } else {
-                            cube1.material.color.set(new THREE.Color(255 / 255, 192 / 255, 203 / 255));
-                            cube2.material.color.set(new THREE.Color(255 / 255, 192 / 255, 203 / 255));
+                            // Update progress bar based on the current index
+                            const progressPercentage = ((index + t) / totalSequences) * 100; // Calculate progress
+                            progressBar.style.width = progressPercentage + '%'; // Update width
+                            progressBar.textContent = Math.round(progressPercentage) + '%'; // Update text
 
+                            if (t < 1) {
+                                requestAnimationFrame(animate);
+                            } else {
+                                cube1.material.color.set(new THREE.Color(255 / 255, 192 / 255, 203 / 255));
+                                cube2.material.color.set(new THREE.Color(255 / 255, 192 / 255, 203 / 255));
 
-                            [this.cubePositions[cube1Key], this.cubePositions[cube2Key]] = [this.cubePositions[cube2Key], this.cubePositions[cube1Key]];
+                                [this.cubePositions[cube1Key], this.cubePositions[cube2Key]] = [this.cubePositions[cube2Key], this.cubePositions[cube1Key]];
+                                completedAnim++;
+                                console.log(completedAnim);
 
-                            isAnimating = false; 
-                        }
-                    };
-                    requestAnimationFrame(animate);
-                } else {
-                    console.warn(`Cubes not found for keys: ${cube1Key} or ${cube2Key}`);
-                    isAnimating = false;
-                    return;
-                }
-            }, index * this.speedUpDurasi); 
+                                isAnimating = false;
+                                if (completedAnim === totalSequences) {
+                                    this.isReplayed = true;
+                                    console.log("Beres replay");
+                                    resolve();
+
+                                }
+                            }
+                        };
+                        requestAnimationFrame(animate);
+                    } else {
+                        console.warn(`Cubes not found for keys: ${cube1Key} or ${cube2Key}`);
+                        isAnimating = false;
+                        return;
+                    }
+                }, index * this.speedUpDurasi);
+            });
         });
     }
-
-
-
-
-
 
     animateCamera(targetControl, targetCamera, targetRenderer, targetScene) {
         if (this.animationProgress < 1) {
@@ -359,7 +360,7 @@ class MagicCube {
         this.clearScene(targetScene);
         const size = cubeState.length;
         const center = size / 2;
-    
+
         // Iterasi setiap layer dalam cubeState
         cubeState.forEach((layerState, layerIndex) => {
             layerState.forEach((row, i) => {
@@ -368,23 +369,23 @@ class MagicCube {
                     const cube = this.createTransparentCube(cubeNumber);
                     const positionKey = `${cubeNumber}`; // Key unik untuk balok
                     cube.name = positionKey;
-    
+
                     // Simpan posisi balok tanpa layer grouping
                     this.cubePositions[positionKey] = { x: j, y: i, z: layerIndex };
-    
+
                     // Atur posisi setiap balok berdasarkan x, y, dan z
                     cube.position.set(
                         this.x_offset * j * this.space,
                         this.y_offset * i * this.space,
                         this.z_offset * layerIndex
                     );
-    
+
                     // Tambahkan balok langsung ke targetScene
                     targetScene.add(cube);
                 });
             });
         });
-    
+
         // Set OrbitControls pivot pada pusat cube
         targetcontrol.target.set(
             this.x_offset * center * this.space,
@@ -393,27 +394,7 @@ class MagicCube {
         );
         console.log("Pivot : ", center * this.space);
     }
-    
-    createTransparentCube(number) {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({
-            color: new THREE.Color(255 / 255, 192 / 255, 203 / 255),
-            transparent: true,
-            opacity: 0.5,
-            depthTest: false,
-        });
-    
-        const cube = new THREE.Mesh(geometry, material);
-        const numberSprite = this.createNumberSprite(number);
-        numberSprite.position.set(0, 0, 0);
-        cube.add(numberSprite);
-    
-        return cube;
-    }
-    
 
-
- 
     createTransparentCube(number) {
         const geometry = new THREE.BoxGeometry(1, 1, 1);
         const material = new THREE.MeshBasicMaterial({
@@ -430,16 +411,25 @@ class MagicCube {
 
         return cube;
     }
-    setCubeSpacing(newSpacing) {
-        this.space = newSpacing;
-        if (this.isSolved) {
-            this.visualizeCube(this.solvedCubeState, this.solvedScene, this.solvedControls);
-
-        }
-        this.visualizeCube(this.cubeState, this.scene, this.controls);
-        this.visualizeCube(this.cubeState, this.replayscene, this.replaycontrols);
 
 
+
+
+    createTransparentCube(number) {
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const material = new THREE.MeshBasicMaterial({
+            color: new THREE.Color(255 / 255, 192 / 255, 203 / 255),
+            transparent: true,
+            opacity: 0.5,
+            depthTest: false,
+        });
+
+        const cube = new THREE.Mesh(geometry, material);
+        const numberSprite = this.createNumberSprite(number);
+        numberSprite.position.set(0, 0, 0);
+        cube.add(numberSprite);
+
+        return cube;
     }
     changeYSpace(isAdd) {
         if (isAdd) {
@@ -457,8 +447,11 @@ class MagicCube {
 
         }
         this.visualizeCube(this.cubeState, this.scene, this.controls);
-        this.visualizeCube(this.cubeState, this.replayscene, this.replaycontrols);
-
+        if(this.isReplayed){
+            this.visualizeCube(this.solvedCubeState, this.replayscene, this.replaycontrols);
+        }else{
+            this.visualizeCube(this.cubeState, this.replayscene, this.replaycontrols);
+        }
 
     }
     changeZSpace(isAdd) {
@@ -476,8 +469,13 @@ class MagicCube {
             this.visualizeCube(this.solvedCubeState, this.solvedScene, this.solvedControls);
 
         }
+        
         this.visualizeCube(this.cubeState, this.scene, this.controls);
-        this.visualizeCube(this.cubeState, this.replayscene, this.replaycontrols);
+        if(this.isReplayed){
+            this.visualizeCube(this.solvedCubeState, this.replayscene, this.replaycontrols);
+        }else{
+            this.visualizeCube(this.cubeState, this.replayscene, this.replaycontrols);
+        }
 
 
     }
@@ -497,8 +495,11 @@ class MagicCube {
 
         }
         this.visualizeCube(this.cubeState, this.scene, this.controls);
-        this.visualizeCube(this.cubeState, this.replayscene, this.replaycontrols);
-
+        if(this.isReplayed){
+            this.visualizeCube(this.solvedCubeState, this.replayscene, this.replaycontrols);
+        }else{
+            this.visualizeCube(this.cubeState, this.replayscene, this.replaycontrols);
+        }
     }
 
     createNumberSprite(number) {
@@ -531,6 +532,9 @@ class MagicCube {
             }
             targetScene.remove(object);
         }
+    }
+    getIsAnimating() {
+        return this.isAnimating;
     }
 }
 
