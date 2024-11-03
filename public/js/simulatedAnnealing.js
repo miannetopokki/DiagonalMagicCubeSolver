@@ -22,9 +22,10 @@ class SimulatedAnnealing extends MagicCube {
 
             const result = await response.json();
             console.log('Hasil solusi dari server:', result);
-            const { solvedCube, h_before, h_after, algoritma, n_iter, h_values, e_values, stuck_freq,execution_time} = result;
+            const { solvedCube, seq_elemen, h_before, h_after, algoritma, n_iter, h_values, e_values, stuck_freq,execution_time} = result;
             this.solvedCubeState = solvedCube; 
             this.animationProgress = 0;
+            this.sequensElement = seq_elemen;
 
             this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
             this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
@@ -102,9 +103,35 @@ class SimulatedAnnealing extends MagicCube {
         this.solveSA(this.cubeState); 
         this.isSolved = true; 
     }
+    getSeqElementLength(){
+        return this.sequensElement.length;
+    }
+    setSpeedDurasi(speed){
+        console.log("Speed = ", speed ,"x");
+        this.speedUpDurasi = this.replayDurasi / speed;
+    }
 }
 
 const simulatedAnnealingInstance = new SimulatedAnnealing(); 
+
+const replayButton = document.getElementById("replay");
+replayButton.addEventListener("click", onReplayButtonClick.bind(this));
+function onReplayButtonClick() {
+    console.log(simulatedAnnealingInstance.getSeqElementLength());
+    if (simulatedAnnealingInstance.getSeqElementLength() === 0) {
+        alert(" Tidak ada replay yang dapat dilakukan,Silahkan solve dulu.");
+        return; 
+    }
+
+    simulatedAnnealingInstance.animateCubeMovement();
+}
+const speedSlider = document.getElementById("speedSlider");
+const currentSpeedLabel = document.getElementById("currentSpeed");
+speedSlider.addEventListener("input", (event) => {
+    const speedValue = event.target.value;
+    simulatedAnnealingInstance.setSpeedDurasi(speedValue);
+    currentSpeedLabel.textContent = speedValue; // Perbarui label tampilan
+});
 
 document.getElementById('addX').addEventListener('click', () => {
     simulatedAnnealingInstance.changeXSpace(true);
@@ -141,6 +168,14 @@ document.getElementById('minusZ').addEventListener('click', () => {
 
 });
 
+// Event listener untuk slider
+const slider = document.getElementById('iterationSlider');
+const currentIterationLabel = document.getElementById('currentIteration');
+slider.addEventListener('input', (event) => {
+    const iteration = parseInt(event.target.value);
+    currentIterationLabel.textContent = iteration; // Update label iterasi
+    updateAnimation(iteration); // Panggil fungsi untuk memperbarui animasi
+});
 
 document.getElementById('solveCubeButton').addEventListener('click', () => {
     simulatedAnnealingInstance.solveCube();

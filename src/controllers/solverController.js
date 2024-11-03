@@ -144,8 +144,10 @@ class Cube {
                 const e_prob = Math.exp(diffH/Tvalue);
                 if (newH < currentH) {
                     currentH = newH;
+                    this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
                 } else if(Math.exp(diffH/Tvalue)>0.5){
                     currentH = newH;
+                    this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
                     this.stuck_freq++;
                 }else{
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
@@ -370,10 +372,7 @@ export function solveSimulatedAnnealing(req, res) {
     const iter = magicCube.getIterasi();
     const e_values = magicCube.getEValues();
     const stuck_freq = magicCube.getStuckFreq();
-    const iter_values = [];
-    for(let i =1; i<= iter; i++){
-        iter_values.push(i);
-    }
+    const sequensElement = magicCube.getSeqElement();
 
     res.json({
         message: "Kubus berhasil diselesaikan",
@@ -386,8 +385,8 @@ export function solveSimulatedAnnealing(req, res) {
         h_values: hValues,
         execution_time: executionTime,
         e_values : e_values,
-        iter_values : iter_values,
         stuck_freq : stuck_freq,
+        seq_elemen: sequensElement
     });
 }
 
