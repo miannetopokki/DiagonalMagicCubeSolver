@@ -308,11 +308,150 @@ class Cube {
     
         return this.cube;
     }
+    geneticAlgorithm(populationSize, iterations) {
+        // Initial Population
+        let population = this.initializePopulation(populationSize);
+        const maxIterations = iterations;
+        do {
+            // Fitness Function
+            let fitnessScores = population.map(cubeState => this.calculateFitness(cubeState));
+            
+            // Check if we found a solution
+            let bestFitness = Math.min(...fitnessScores);
+            let bestIndex = fitnessScores.indexOf(bestFitness);
+            if (bestFitness === 0) {
+                // Solution found
+                this.cube = population[bestIndex];
+                return this.cube;
+            }
+            
+            // Selection
+            // Lakukan seleksi untuk mendapatkan parent
+            let matingPool = this.selection(population, fitnessScores);
+
+            // Crossover - Generate new population
+            let newPopulation = [];
+            for (let i = 0; i < population.length-1; i+=2){
+                let parent1 = matingPool[i];
+                let parent2 = matingPool[i + 1];
+                let child = this.crossover(parent1, parent2);
+                newPopulation.push(child[0]);
+                newPopulation.push(child[1]);
+            }
+            // kalo ada parent yang gaada pasangan, dijadiin generasi baru
+            if (matingPool.length % 2 !== 0) {
+                newPopulation.push(matingPool[matingPool.length - 1]);
+            }
+
+            // Mutation 
+            let mutationRate = 0.1;
+            newPopulation = newPopulation.map(individual => 
+                Math.random() < mutationRate ? this.mutate(individual) : individual
+            );
+
+            population = newPopulation;
+            this.iterasi++;
+        }while (this.iterasi < maxIterations);
+
+        // Return best solution found
+        let finalFitnessScores = population.map(cubeState => this.calculateFitness(cubeState));
+        let bestFinalIndex = finalFitnessScores.indexOf(Math.min(...finalFitnessScores));
+        this.cube = population[bestFinalIndex];
+        return this.cube;
+    }
+
+    initializePopulation(size) {
+        // Create an array of random cube states
+        const population = [];
+        for (let i = 0; i < size; i++) {
+            let cubeCopy = this.cube;
+            cubeCopy = this.randomizeCube(cubeCopy);
+            population.push(cubeCopy);
+        }
+        return population;
+    }
+
+    calculateFitness(cubeState) {
+        const originalCube = this.cube;
+        this.cube = cubeState;
+        const fitness = this.objectiveFunction();
+        this.cube = originalCube;
+        return fitness;
+    }
+
+    selection(population,fitnessValues) {
+        // Seleksi menggunakan random wheel
+
+        const totalFitness = fitnessValues.reduce((sum, fitness) => sum + fitness, 0);
+        const cumulativeProbabilities = [];
+        
+        // Calculate cumulative probabilities
+        let cumulativeSum = 0;
+        for (let i = 0; i < fitnessValues.length; i++) {
+            cumulativeSum += fitnessValues[i] / totalFitness;
+            cumulativeProbabilities[i] = cumulativeSum;
+        }
+        const matingPool = [];
+        for (let i = 0; i < population.length; i++){
+            // Spin the wheel 
+            const randomValue = Math.random();
+            // Find the individual where cumulative probability is just greater than randomValue
+            for (let i = 0; i < population.length; i++) {
+                if (randomValue <= cumulativeProbabilities[i]) {
+                    matingPool.push(population[i]);
+                }
+            }
+        }
+        return matingPool;
+    }
+
+    crossover(parent1, parent2) {
+        const child1 = parent1;
+        const child2 = parent2;
+        const crossoverPoint = Math.floor(Math.random() * 5);
+
+        for (let i = crossoverPoint; i < 5; i++) {
+            for (let j = 0; j < 5; j++) {
+                for (let k = 0; k < 5; k++) {
+                    child1[i][j][k] = parent2[i][j][k];
+                    child2[i][j][k] = parent1[i][j][k];
+                }
+            }
+        }
+        return [child1, child2];
+    }
+
+    mutate(cubeState) {
+        // Swap two random elements in the cube
+        let i1 = Math.floor(Math.random() * 5);
+        let j1 = Math.floor(Math.random() * 5);
+        let k1 = Math.floor(Math.random() * 5);
+        let i2 = Math.floor(Math.random() * 5);
+        let j2 = Math.floor(Math.random() * 5);
+        let k2 = Math.floor(Math.random() * 5);
+
+        [cubeState[i1][j1][k1], cubeState[i2][j2][k2]] = [cubeState[i2][j2][k2], cubeState[i1][j1][k1]];
+        return cubeState;
+    }
+
+    randomizeCube(cubeState) {
+        while (true) {
+            // tukar 2 angka
+            let i = Math.floor(Math.random() * 5);
+            let j = Math.floor(Math.random() * 5);
+            let k = Math.floor(Math.random() * 5);
     
-    
-    
-    
-    
+            let x = Math.floor(Math.random() * 5);
+            let y = Math.floor(Math.random() * 5);
+            let z = Math.floor(Math.random() * 5);
+            if (i !== x || j !== y || k !== z) {
+                [cubeState[i][j][k], cubeState[x][y][z]] = [cubeState[x][y][z], cubeState[i][j][k]];
+                return cubeState;
+            }
+        }
+        return cubeState;
+    }
+
     getH(){
         return this.h;
     }
@@ -533,6 +672,46 @@ export function solveSidewaysHC(req, res) {
     res.json({
         message: "Kubus berhasil diselesaikan",
         algoritma: "Sideways Hill Climb",
+        n_iter: iter,
+        solvedCube,
+        h_before: objFuncBefore,
+        h_after: objFuncAfter,
+        magic_number: magicnum,
+        h_values: hValues,
+        execution_time: executionTime,
+        seq_elemen: sequensElement
+    });
+}
+
+export function solveGeneticAlgorithm(req, res) {
+    const { cubeState, jumlahIterasi, banyakPopulasi } = req.body;
+
+    if (!cubeState || !Array.isArray(cubeState)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid cube state provided"
+        });
+    }
+
+    const magicCube = new Cube(cubeState.length, cubeState);
+    const objFuncBefore = magicCube.getObjective();
+
+    const startTime = Date.now();
+    const solvedCube = magicCube.geneticAlgorithm(banyakPopulasi,jumlahIterasi);
+    const endTime = Date.now();
+    const executionTime = endTime - startTime;
+
+    const objFuncAfter = magicCube.getObjective();
+    const magicnum = magicCube.getMagicNumber();
+    const iter = magicCube.getIterasi();
+    const sequensElement = magicCube.getSeqElement();
+
+    const hValues = magicCube.getHValues(1);  //ambil tiap 100 iterasi, kalo semua ngelag
+
+
+    res.json({
+        message: "Kubus berhasil diselesaikan",
+        algoritma: "Genetic Algorithm",
         n_iter: iter,
         solvedCube,
         h_before: objFuncBefore,

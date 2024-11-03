@@ -172,6 +172,9 @@ button:disabled {
     gap: 10px;
     width: 100%;
 }
+.offset input{
+    width: 100%;
+}
 
 /* HC-list styling */
 #hc-list,

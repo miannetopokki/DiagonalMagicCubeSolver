@@ -8,10 +8,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
     <script src="js/magicCube.js" type="module"></script>
+    <script src="js/geneticalgo.js" type="module"></script>
 </head>
 <body>
-    <nav class="navbar">
-        <label>Home</label>
+        <nav class="navbar">
         <label for="algo-list">Select Algorithm:</label>
         <select id="algo-list" onchange="location = this.value;">
             <option value="/">Select</option>
@@ -20,6 +20,76 @@
             <option value="/geneticalgorithm">Genetic Algorithm</option>
         </select>
     </nav>
-    <h1>Magic Cube Solver - Genetic Algorithm</h1>
+    <h1>Magic Cube Solver - Hill Climb</h1>
+    <section class="button-container">
+        <button id="generateCubeButton" onclick="location.href='/hillclimb'">Generate Random Cube State</button>
+        <section class="offset">
+            <button id="addX">+X</button>
+            <button id="minusX">-X</button>
+        </section>
+        <section class="offset">
+            <button id="addY">+Y</button>
+            <button id="minusY">-Y</button>
+        </section>
+        <section class="offset">
+            <button id="addZ">+Z</button>
+            <button id="minusZ">-Z</button>
+        </section>
+
+        <section class="offset">
+            <input type="number" id="iterationInput" placeholder="Iterasi"/>
+        </section>
+        
+        <section class="offset">
+            <input type="number" id="populationInput" placeholder="Populasi" />
+        </section>
+
+        <button id="axisButton">Axis</button>
+        <button id="gridButton">Grid </button>
+
+        <button id="solveCubeButton">Solve</button>
+        <button id="replay">Replay</button>
+
+    </section>
+    <section class="cube-container">
+        <div class="cube-item">
+            <h2>Initial State</h2>
+            <div id="cubeContainer"></div>
+            <section class="desc-container">
+                <p id="hBeforeText">H Before: <span id="hBeforeValue">-</span></p>
+            </section>
+        </div>
+        <div class="cube-item">
+            <h2>Solved State</h2>
+            <div id="solvedCubeContainer"></div>
+            <section class="desc-container">
+                <p id="hAfterText">H After: <span id="hAfterValue">-</span></p>
+                <p id="algoritma">Algorithm: <span id="algoritmaSpan">-</span></p>
+                <p id="iterasi">Iterations: <span id="iterasiSpan">-</span></p>
+                <p id="waktuEksekusi">Waktu Eksekusi: <span id="waktuEksekusiSpan">-</span> ms</p>
+
+            </section>
+        </div>
+        <div class="cube-item">
+            <h2>Replay</h2>
+            <div>
+                <section class="desc-container">
+                    <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
+                    <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
+                </section>
+                <section class="desc-container">
+                    <input type="range" id="speedSlider" min="1" max="10" value="1" />
+                    <label for="speedSlider">Speed: <span id="currentSpeed">1</span></label>
+                </section>
+            </div>
+            <div id="replayCubeContainer">
+            </div>
+
+        </div>
+        <div>
+            <h2>Plot</h2>
+            <canvas id="objectiveFunctionChart" width="400" height="200"></canvas>
+        </div>
+    </section>
 </body>
 </html>
