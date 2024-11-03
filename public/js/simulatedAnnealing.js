@@ -88,7 +88,7 @@ class SimulatedAnnealing extends MagicCube {
                 data: {
                     labels: Array.from({ length: h_values.length }, (_, i) => i + 1),
                     datasets: [{
-                        label: 'Objective Function (h) per 100 Iteration',
+                        label: 'Objective Function (h) per 25 Iteration',
                         data: h_values,
                         borderColor: 'rgba(75, 192, 192, 1)',
                         fill: false
