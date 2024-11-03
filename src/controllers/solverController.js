@@ -159,9 +159,9 @@ class Cube {
     
     simulatedAnnealing() {
         let currentH = this.objectiveFunction();
-        let Tvalue = 10000;
+        let Tvalue = 30000;
         const coolingRate = 0.99;
-        const maxIterations = 20000;
+        const maxIterations = 12000;
         do {
             let i = Math.floor(Math.random() * 5);
             let j = Math.floor(Math.random() * 5);
@@ -195,7 +195,7 @@ class Cube {
                 }
                 Tvalue *= coolingRate;
             }
-        } while (this.iterasi < maxIterations && Tvalue > 1e-10);
+        } while (this.iterasi < maxIterations || Tvalue > 1e-10);
         return this.cube;
     }
 
