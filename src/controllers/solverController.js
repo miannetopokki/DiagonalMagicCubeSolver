@@ -199,33 +199,31 @@ class Cube {
         return this.cube;
     }
 
-    randomRestartHillClimbing() {
-        const maxRestart = 100;
-        let best_h = this.getObjective(); // Start with the current h
-        let best_cube = this.cube; // Start with the current cube
-        
-        console.log("Initial Best H: ", best_h);
-    
+    randomRestartHillClimbing(maxRestart) {
+        let best_h = this.getObjective(); 
+        let best_cube = this.cube; 
+        let tempIterasi = 0;
+        console.log(maxRestart);
         for (let i = 0; i < maxRestart; i++) {
-            console.log(this.n);
             const newCube = new Cube(this.n, this.generateMagicCubeState(this.n));
             
-            // console.log("Generated Cube: ", newCube.cube);
+           
     
             newCube.steepestAscentHillClimbing();
+            tempIterasi += newCube.getIterasi();
             
-            let currentH = newCube.getH();
+            let currentH = newCube.getObjective();
             this.hValues.push(currentH);
-            console.log(`Iteration ${i}: Current H = ${currentH}, Best H = ${best_h}`);
+     
             
             if (currentH < best_h) {
                 best_h = currentH;
-                best_cube = newCube.cube; // Copy the best cube found
-                console.log("New Best Found: ", best_h);
+                best_cube = JSON.parse(JSON.stringify(newCube.cube));
+                console.log(`Iteration ${i}: Current H = ${currentH}, Best H = ${best_h}`);
             }
         }
-        
-        this.cube = best_cube; // Set the best cube found
+        this.iterasi = tempIterasi;
+        this.cube = best_cube; 
         return this.cube;
     }
     
@@ -255,14 +253,14 @@ class Cube {
         return cubeState;
     }
 
-    sidewaysmoveHillClimbing() {
+    sidewaysmoveHillClimbing(maxSidewaysMoves) {
         let currentH = this.objectiveFunction();
         let improved;
-     
-    
+        let sidewaysMoves = 0;
+        console.log(maxSidewaysMoves);
+        
         do {
             improved = false;
-         
     
             for (let i = 0; i < this.n; i++) {
                 for (let j = 0; j < this.n; j++) {
@@ -275,24 +273,29 @@ class Cube {
                                         [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
     
                                         let newH = this.objectiveFunction();
-                                
-                                        
-                                        // If newH is better, accept the change
+    
+                                       
                                         if (newH < currentH) {
                                             currentH = newH;
                                             improved = true;
-                                          
+                                            sidewaysMoves = 0; //Reset counter
+                                            
                                             this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
                                             this.hValues.push(currentH * (-1));
                                             this.iterasi++;
-                                        } else if (newH === currentH) { 
-                                                currentH = newH;
-                                                this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
-                                                this.hValues.push(currentH * (-1));
-                                                this.iterasi++;
+                                        } else if (newH === currentH && sidewaysMoves < maxSidewaysMoves) { 
+                                            currentH = newH;
+                                            sidewaysMoves++;
+                                            
+                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                            this.hValues.push(currentH * (-1));
+                                            this.iterasi++;
                                         } else { 
                                             [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                                         }
+                                        
+            
+                                        if (sidewaysMoves >= maxSidewaysMoves) return this.cube;
                                     }
                                 }
                             }
@@ -300,11 +303,12 @@ class Cube {
                     }
                 }
             }
-
+            
         } while (improved);
     
         return this.cube;
     }
+    
     
     
     
@@ -459,7 +463,7 @@ export function solveSimulatedAnnealing(req, res) {
 }
 
 export function solveRandomRestartHC(req, res) {
-    const { cubeState } = req.body;
+    const { cubeState,maxRestarts } = req.body;
 
     if (!cubeState || !Array.isArray(cubeState)) {
         return res.status(400).json({
@@ -467,12 +471,11 @@ export function solveRandomRestartHC(req, res) {
             message: "Invalid cube state provided"
         });
     }
-
     const magicCube = new Cube(cubeState.length, cubeState);
     const objFuncBefore = magicCube.getObjective();
 
     const startTime = Date.now();
-    const solvedCube = magicCube.randomRestartHillClimbing();
+    const solvedCube = magicCube.randomRestartHillClimbing(maxRestarts);
     const endTime = Date.now();
     const executionTime = endTime - startTime;
 
@@ -501,7 +504,7 @@ export function solveRandomRestartHC(req, res) {
 }
 
 export function solveSidewaysHC(req, res) {
-    const { cubeState } = req.body;
+    const { cubeState,maxsidewaysMove  } = req.body;
 
     if (!cubeState || !Array.isArray(cubeState)) {
         return res.status(400).json({
@@ -515,7 +518,7 @@ export function solveSidewaysHC(req, res) {
 
     const startTime = Date.now();
     console.log ("start sideways");
-    const solvedCube = magicCube.sidewaysmoveHillClimbing();
+    const solvedCube = magicCube.sidewaysmoveHillClimbing(maxsidewaysMove);
     const endTime = Date.now();
     const executionTime = endTime - startTime;
 
