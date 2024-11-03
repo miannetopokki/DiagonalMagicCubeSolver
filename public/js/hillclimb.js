@@ -239,7 +239,7 @@ function handleSelection(value) {
     }
     else if (value === "3") {
         index = 3;
-        sliderSection.style.display = 'block';
+        sidewaysSliderSection.style.display = 'block';
     }
 }
 function updateSliderValue(value) {
