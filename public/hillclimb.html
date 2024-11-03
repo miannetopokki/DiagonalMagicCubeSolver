@@ -13,8 +13,14 @@
     <script src="js/hillclimb.js" type="module"></script>
 </head>
 <body>
+    <div id="loading" style="display: none;">
+        <img src="images/load.gif" alt="Loading..." />
+    </div>
     <nav class="navbar">
-        <label for="algo-list">Select Algorithm:</label>
+        <div>
+        <button onclick="location.href='index.html'">Home</button>
+
+        </div>
         <select id="algo-list" onchange="location = this.value;">
             <option value="/">Select</option>
             <option value="/hillclimb">Hill Climb</option>
@@ -43,11 +49,23 @@
 
         <button id="solveCubeButton">Solve</button>
         <select id="hc-list" onchange="handleSelection(this.value);">
-            <option value="">Select</option>
             <option value="1">Steepest Ascent</option>
             <option value="2">Random Restart</option>
             <option value="3">Sideway</option>
+            <option value="4">Stochastic</option>
         </select>        
+        </select>
+        <section id="sideways-slider" style="display: none;">
+            <label for="maxSidewaysMoves">Max Sideways Moves:</label>
+            <input type="range" id="maxSidewaysMoves" min="1" max="100" value="10" oninput="updateSliderValue(this.value)">
+            <span id="sliderValue">10</span>
+        </section>
+        
+        <section id="restart-slider" style="display: none;">
+            <label for="maxRestarts">Max Restarts:</label>
+            <input type="range" id="maxRestarts" min="1" max="100" value="10" oninput="updateRestartSliderValue(this.value)">
+            <span id="restartSliderValue">10</span>
+        </section>
         <button id="replay">Replay</button>
 
     </section>
@@ -67,16 +85,19 @@
                 <p id="algoritma">Algorithm: <span id="algoritmaSpan">-</span></p>
                 <p id="iterasi">Iterations: <span id="iterasiSpan">-</span></p>
                 <p id="waktuEksekusi">Waktu Eksekusi: <span id="waktuEksekusiSpan">-</span> ms</p>
+                <p id="jumlahRestart" style="display: none;">Jumlah Restart: <span id="jumlahRestartValue">-</span></p>
+
+
 
             </section>
         </div>
         <div class="cube-item">
             <h2>Replay</h2>
             <div>
-                <section class="desc-container">
+                <!-- <section class="desc-container">
                     <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
                     <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
-                </section>
+                </section> -->
                 <section class="desc-container">
                     <input type="range" id="speedSlider" min="1" max="10" value="1" />
                     <label for="speedSlider">Speed: <span id="currentSpeed">1</span></label>

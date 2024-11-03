@@ -11,10 +11,11 @@
 <body>
     <header>
         <h1>Welcome to Magic Cube Solver</h1>
-        <p>Select an algorithm to solve the magic cube:</p>
+        <p>Explore and solve the magic cube with advanced algorithms:</p>
     </header>
-    
+
     <nav>
+        <button onclick="location.href='index.html'">Home</button>
         <select id="algorithmSelect" onchange="navigateToAlgorithm()">
             <option value="">-- Choose an Algorithm --</option>
             <option value="/hillclimb">Hill Climb</option>
@@ -22,6 +23,24 @@
             <option value="/geneticalgorithm">Genetic Algorithm</option>
         </select>
     </nav>
+
+    <main>
+        <section class="feature" id="solve-feature">
+            <h2>3D Visualization</h2>
+            <p>Experience our powerful solving algorithms.</p>
+            <img src="images/rep.gif" alt="Solve feature GIF">
+        </section>
+        <section class="feature" id="plot-feature">
+            <h2>Plot</h2>
+            <p>Visualize the cube's transformation.</p>
+            <img src="images/plot.gif" alt="Plot feature GIF">
+        </section>
+        <section class="feature" id="replay-feature">
+            <h2>Replay</h2>
+            <p>Replay past solutions and analyze.</p>
+            <img src="images/replay.gif" alt="Replay feature GIF">
+        </section>
+    </main>
 
     <footer>
         <p>&copy; 2024 Magic Cube Solver</p>
