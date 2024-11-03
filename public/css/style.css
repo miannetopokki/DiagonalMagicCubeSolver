@@ -84,11 +84,50 @@ h1, h2 {
     position: relative;
 }
 
-.desc-container {
-    font-size: 0.9em;
-    color: #ccc;
-    margin-top: 10px;
+.float-container {
+    position: fixed; /* Keep the float container fixed */
+    top: 70px; /* Adjust position from the top */
+    right: 15px; /* Adjust position from the right */
+    z-index: 1000; /* Keep it above other content */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack child elements vertically */
+    gap: 15px; /* Space between child sections */
+    max-width: 220px; /* Set maximum width */
 }
+
+.desc-container {
+    font-size: 1em; /* Slightly increase the font size for better readability */
+    color: #e0e0e0; /* A lighter shade of grey for improved contrast */
+    background-color: #222; /* Darker background for better contrast */
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px; /* Increased padding for a more spacious feel */
+    border-radius: 10px; /* Slightly larger border radius */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow for a more pronounced effect */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
+
+.slider-container {
+    background-color: #222; /* Match background with desc-container */
+    padding: 10px; /* Add padding */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Light shadow */
+}
+
+.desc-container p {
+    margin: 0; /* Remove default margin */
+    padding: 5px; /* Add padding to each paragraph */
+    border-left: 4px solid #1d0c33; /* Add a left border for emphasis */
+    background-color: rgba(0, 0, 0, 0.3); /* Slightly transparent background for paragraphs */
+    border-radius: 4px; /* Rounded corners for paragraphs */
+}
+
+.desc-container p span {
+    font-weight: bold; /* Make span text bold for emphasis */
+}
+
 
 /* Button container */
 .button-container {
@@ -101,7 +140,7 @@ h1, h2 {
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
     position: fixed;
-    top: 60px;
+    top: 80px;
     left: 10px;
     z-index: 1000;
 }
