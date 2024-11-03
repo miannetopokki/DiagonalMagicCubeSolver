@@ -52,7 +52,13 @@
             <label for="maxSidewaysMoves">Max Sideways Moves:</label>
             <input type="range" id="maxSidewaysMoves" min="1" max="100" value="10" oninput="updateSliderValue(this.value)">
             <span id="sliderValue">10</span>
-        </section>        
+        </section>
+        
+        <section id="restart-slider" style="display: none;">
+            <label for="maxRestarts">Max Restarts:</label>
+            <input type="range" id="maxRestarts" min="1" max="100" value="10" oninput="updateRestartSliderValue(this.value)">
+            <span id="restartSliderValue">10</span>
+        </section>
         <button id="replay">Replay</button>
 
     </section>
@@ -72,6 +78,9 @@
                 <p id="algoritma">Algorithm: <span id="algoritmaSpan">-</span></p>
                 <p id="iterasi">Iterations: <span id="iterasiSpan">-</span></p>
                 <p id="waktuEksekusi">Waktu Eksekusi: <span id="waktuEksekusiSpan">-</span> ms</p>
+                <p id="jumlahRestart" style="display: none;">Jumlah Restart: <span id="jumlahRestartValue">-</span></p>
+
+
 
             </section>
         </div>

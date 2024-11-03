@@ -87,15 +87,16 @@ class HillClimb extends MagicCube {
         }
 
     }
-    async solveRandomRestartHC(cubeState){
-      
+    async solveRandomRestartHC(cubeState,maxRestarts) {
+
+  
         try {
             const response = await fetch('/api/randomrestartHC', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ cubeState })
+                body: JSON.stringify({ cubeState, maxRestarts })
             });
 
             if (!response.ok) {
@@ -114,10 +115,15 @@ class HillClimb extends MagicCube {
 
             this.plotObjectiveFunction(h_values);
 
+            const jumlahRestartElement = document.getElementById('jumlahRestart');
+            jumlahRestartElement.style.display = 'block'; 
+
+
             document.getElementById('hBeforeValue').innerText = h_before;
             document.getElementById('hAfterValue').innerText = h_after;
             document.getElementById('algoritmaSpan').innerText = algoritma;
             document.getElementById('iterasiSpan').innerText = n_iter;
+            document.getElementById('jumlahRestartValue').innerText = maxRestarts;
             document.getElementById('waktuEksekusiSpan').innerText = execution_time;
             document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
 
@@ -129,12 +135,16 @@ class HillClimb extends MagicCube {
 
     solveCube(index) {
         const maxSidewaysMoves = index === 3 ? parseInt(document.getElementById('maxSidewaysMoves').value) : null;
-        console.log("maxSidewaysMoves = ", maxSidewaysMoves);   
+        const maxRestarts = index === 2 ? parseInt(document.getElementById('maxRestarts').value) : null;
+
+        console.log("maxSidewaysMoves = ", maxSidewaysMoves); 
+        console.log("maxRestarts = ", maxRestarts);  
+
         if (index == 1){
             this.solveSteepHC(this.cubeState);
         }
         else if(index == 2){
-            this.solveRandomRestartHC(this.cubeState);
+            this.solveRandomRestartHC(this.cubeState,maxRestarts);
         }
         else if(index == 3){
             this.solveSidewayHC(this.cubeState,maxSidewaysMoves);
@@ -214,14 +224,18 @@ document.getElementById('minusZ').addEventListener('click', () => {
 });
 
 function handleSelection(value) {
-    const sliderSection = document.getElementById('sideways-slider');
+    const sidewaysSliderSection = document.getElementById('sideways-slider');
+    const restartSliderSection = document.getElementById('restart-slider');
+
+    sidewaysSliderSection.style.display = 'none';
+    restartSliderSection.style.display = 'none';
+    
 
     if (value === "1") {
         index = 1;
-        sliderSection.style.display = 'none';
     } else if (value === "2") {
         index = 2;
-        sliderSection.style.display = 'none';
+        restartSliderSection.style.display = 'block';
     }
     else if (value === "3") {
         index = 3;
@@ -232,10 +246,12 @@ function updateSliderValue(value) {
     document.getElementById('sliderValue').innerText = value;
 }
 
+function updateRestartSliderValue(value) {
+    document.getElementById('restartSliderValue').innerText = value;
+}
 
 window.updateSliderValue = updateSliderValue;
-
-
+window.updateRestartSliderValue = updateRestartSliderValue;
 window.handleSelection = handleSelection;
 
 
