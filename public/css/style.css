@@ -7,6 +7,14 @@ body {
     flex-direction: column;
     align-items: center;
 }
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at center, #000000, #001120, #000000);
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
+
 
 /* Navbar */
 .navbar {
@@ -16,6 +24,7 @@ body {
     background-color: #333;
     padding: 10px;
     position: fixed;
+    gap: 30px;
     top: 0;
     width: 100%;
     z-index: 1000;

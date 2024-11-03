@@ -1,28 +1,109 @@
+/* Reset CSS */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body styling */
 body {
     font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    margin: 0;
+    background: radial-gradient(circle at center, #000000, #001120, #000000);
+    color: #ffffff;
+    text-align: center;
     padding: 20px;
 }
 
+/* Header styling */
 header {
-    text-align: center;
     margin-bottom: 30px;
 }
 
+header h1 {
+    font-size: 2.5em;
+    color: #ffffff;
+    text-shadow: 0 0 5px #ffffff;
+}
+
+header p {
+    font-size: 1.2em;
+    color: #cccccc;
+}
+
+/* Navbar styling */
 nav {
-    text-align: center;
+    display: flex;
+    justify-content: center;
+    gap: 10px;
     margin-bottom: 20px;
 }
 
+button,
 select {
-    padding: 10px;
+    padding: 10px 15px;
     font-size: 16px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
 }
 
-footer {
+button {
+    background-color: #ff6600;
+    color: #ffffff;
+}
+
+select {
+    background-color: #33475b;
+    color: #ffffff;
+}
+
+button:hover,
+select:hover {
+    opacity: 0.9;
+}
+
+/* Main content styling */
+main {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 20px;
+}
+
+.feature {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 10px;
+    padding: 20px;
+    width: 30%;
     text-align: center;
+    box-shadow: 0px 0px 15px rgba(255, 255, 255, 0.2);
+    transition: transform 0.3s;
+}
+
+.feature h2 {
+    color: #ffcc00;
+    margin-bottom: 10px;
+}
+
+.feature p {
+    color: #cccccc;
+    font-size: 1em;
+    margin-bottom: 10px;
+}
+
+.feature img {
+    max-width: 100%;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+}
+
+/* Hover effect for features */
+.feature:hover {
+    transform: scale(1.05);
+}
+
+/* Footer styling */
+footer {
     margin-top: 50px;
-    font-size: 14px;
-    color: #666;
+    color: #cccccc;
+    font-size: 0.9em;
 }
