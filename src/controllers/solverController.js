@@ -250,14 +250,14 @@ class Cube {
         return cubeState;
     }
 
-    sidewaysmoveHillClimbing() {
+    sidewaysmoveHillClimbing(maxSidewaysMoves) {
         let currentH = this.objectiveFunction();
         let improved;
-     
-    
+        let sidewaysMoves = 0;
+        console.log(maxSidewaysMoves);
+        
         do {
             improved = false;
-         
     
             for (let i = 0; i < this.n; i++) {
                 for (let j = 0; j < this.n; j++) {
@@ -270,24 +270,29 @@ class Cube {
                                         [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
     
                                         let newH = this.objectiveFunction();
-                                
-                                        
-                                        // If newH is better, accept the change
+    
+                                       
                                         if (newH < currentH) {
                                             currentH = newH;
                                             improved = true;
-                                          
+                                            sidewaysMoves = 0; //Reset counter
+                                            
                                             this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
                                             this.hValues.push(currentH * (-1));
                                             this.iterasi++;
-                                        } else if (newH === currentH) { 
-                                                currentH = newH;
-                                                this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
-                                                this.hValues.push(currentH * (-1));
-                                                this.iterasi++;
+                                        } else if (newH === currentH && sidewaysMoves < maxSidewaysMoves) { 
+                                            currentH = newH;
+                                            sidewaysMoves++;
+                                            
+                                            this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]]]);
+                                            this.hValues.push(currentH * (-1));
+                                            this.iterasi++;
                                         } else { 
                                             [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                                         }
+                                        
+            
+                                        if (sidewaysMoves >= maxSidewaysMoves) return this.cube;
                                     }
                                 }
                             }
@@ -295,11 +300,12 @@ class Cube {
                     }
                 }
             }
-
+            
         } while (improved);
     
         return this.cube;
     }
+    
     
     
     
@@ -462,7 +468,7 @@ export function solveRandomRestartHC(req, res) {
 }
 
 export function solveSidewaysHC(req, res) {
-    const { cubeState } = req.body;
+    const { cubeState,maxsidewaysMove  } = req.body;
 
     if (!cubeState || !Array.isArray(cubeState)) {
         return res.status(400).json({
@@ -476,7 +482,7 @@ export function solveSidewaysHC(req, res) {
 
     const startTime = Date.now();
     console.log ("start sideways");
-    const solvedCube = magicCube.sidewaysmoveHillClimbing();
+    const solvedCube = magicCube.sidewaysmoveHillClimbing(maxsidewaysMove);
     const endTime = Date.now();
     const executionTime = endTime - startTime;
 

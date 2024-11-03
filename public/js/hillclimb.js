@@ -48,14 +48,14 @@ class HillClimb extends MagicCube {
             console.error('Error:', error);
         }
     }
-    async solveSidewayHC(cubeState){
+    async solveSidewayHC(cubeState,maxsidewaysMove) {
         try {
             const response = await fetch('/api/sidewaysmove', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ cubeState })
+                body: JSON.stringify({ cubeState,maxsidewaysMove })
             });
 
             if (!response.ok) {
@@ -79,7 +79,7 @@ class HillClimb extends MagicCube {
             document.getElementById('algoritmaSpan').innerText = algoritma;
             document.getElementById('iterasiSpan').innerText = n_iter;
             document.getElementById('waktuEksekusiSpan').innerText = execution_time;
-            document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
+            document.getElementById('iterationSlider').max = n_iter; 
 
 
         } catch (error) {
@@ -128,7 +128,8 @@ class HillClimb extends MagicCube {
     }
 
     solveCube(index) {
-    
+        const maxSidewaysMoves = index === 3 ? parseInt(document.getElementById('maxSidewaysMoves').value) : null;
+        console.log("maxSidewaysMoves = ", maxSidewaysMoves);   
         if (index == 1){
             this.solveSteepHC(this.cubeState);
         }
@@ -136,7 +137,7 @@ class HillClimb extends MagicCube {
             this.solveRandomRestartHC(this.cubeState);
         }
         else if(index == 3){
-            this.solveSidewayHC(this.cubeState);
+            this.solveSidewayHC(this.cubeState,maxSidewaysMoves);
         }
         this.isSolved = true; 
     }
@@ -213,21 +214,34 @@ document.getElementById('minusZ').addEventListener('click', () => {
 });
 
 function handleSelection(value) {
+    const sliderSection = document.getElementById('sideways-slider');
+
     if (value === "1") {
         index = 1;
+        sliderSection.style.display = 'none';
     } else if (value === "2") {
         index = 2;
+        sliderSection.style.display = 'none';
     }
     else if (value === "3") {
         index = 3;
+        sliderSection.style.display = 'block';
     }
 }
+function updateSliderValue(value) {
+    document.getElementById('sliderValue').innerText = value;
+}
+
+
+window.updateSliderValue = updateSliderValue;
+
 
 window.handleSelection = handleSelection;
 
 
 document.getElementById('solveCubeButton').addEventListener('click', () => {
-    hillClimbInstance.solveCube(index);
+    const maxSidewaysMoves = parseInt(document.getElementById('maxSidewaysMoves').value);
+    hillClimbInstance.solveCube(index, maxSidewaysMoves);
 });
 document.getElementById('gridButton').addEventListener('click', () => {
     hillClimbInstance.addGrid();
