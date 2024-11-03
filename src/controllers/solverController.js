@@ -318,6 +318,7 @@ class Cube {
             
             // Check if we found a solution
             let bestFitness = Math.min(...fitnessScores);
+            this.hValues.push(bestFitness * (-1));
             let bestIndex = fitnessScores.indexOf(bestFitness);
             if (bestFitness === 0) {
                 // Solution found
@@ -704,7 +705,7 @@ export function solveGeneticAlgorithm(req, res) {
     const objFuncAfter = magicCube.getObjective();
     const magicnum = magicCube.getMagicNumber();
     const iter = magicCube.getIterasi();
-    const sequensElement = magicCube.getSeqElement();
+    // const sequensElement = magicCube.getSeqElement();
 
     const hValues = magicCube.getHValues(1);  //ambil tiap 100 iterasi, kalo semua ngelag
 
@@ -718,7 +719,6 @@ export function solveGeneticAlgorithm(req, res) {
         h_after: objFuncAfter,
         magic_number: magicnum,
         h_values: hValues,
-        execution_time: executionTime,
-        seq_elemen: sequensElement
+        execution_time: executionTime
     });
 }

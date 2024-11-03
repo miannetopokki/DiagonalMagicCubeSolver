@@ -1,12 +1,19 @@
-// hillclimb.js
 import { MagicCube } from "./magicCube.js";
 
 class GeneticAlgorithm extends MagicCube {
   constructor() {
     super();
   }
+  showLoading() {
+    document.getElementById("loading").style.display = "block";
+  }
+
+  hideLoading() {
+    document.getElementById("loading").style.display = "none";
+  }
 
   async solveGA(cubeState) {
+    this.showLoading();
     try {
       const iterationInput = document.getElementById("iterationInput").value;
       const populationInput = document.getElementById("populationInput").value;
@@ -30,7 +37,6 @@ class GeneticAlgorithm extends MagicCube {
       console.log("Hasil solusi dari server:", result);
       const {
         solvedCube,
-        seq_elemen,
         h_before,
         h_after,
         algoritma,
@@ -40,7 +46,7 @@ class GeneticAlgorithm extends MagicCube {
       } = result;
       this.solvedCubeState = solvedCube;
       this.animationProgress = 0;
-      this.sequensElement = seq_elemen;
+      //   this.sequensElement = seq_elemen;
 
       this.animateCamera(
         this.solvedControls,
@@ -61,9 +67,11 @@ class GeneticAlgorithm extends MagicCube {
       document.getElementById("algoritmaSpan").innerText = algoritma;
       document.getElementById("iterasiSpan").innerText = n_iter;
       document.getElementById("waktuEksekusiSpan").innerText = execution_time;
-      document.getElementById("iterationSlider").max = n_iter; // Set max value for the slider
+    //   document.getElementById("iterationSlider").max = n_iter; // Set max value for the slider
     } catch (error) {
       console.error("Error:", error);
+    } finally {
+      this.hideLoading();
     }
   }
 
@@ -116,14 +124,14 @@ document.getElementById("minusY").addEventListener("click", () => {
   GAInstance.changeYSpace(false);
 });
 
-// Event listener untuk slider
-const slider = document.getElementById("iterationSlider");
-const currentIterationLabel = document.getElementById("currentIteration");
-slider.addEventListener("input", (event) => {
-  const iteration = parseInt(event.target.value);
-  currentIterationLabel.textContent = iteration; // Update label iterasi
-  updateAnimation(iteration); // Panggil fungsi untuk memperbarui animasi
-});
+// // Event listener untuk slider
+// const slider = document.getElementById("iterationSlider");
+// const currentIterationLabel = document.getElementById("currentIteration");
+// slider.addEventListener("input", (event) => {
+//   const iteration = parseInt(event.target.value);
+//   currentIterationLabel.textContent = iteration; // Update label iterasi
+//   updateAnimation(iteration); // Panggil fungsi untuk memperbarui animasi
+// });
 
 document.getElementById("addZ").addEventListener("click", () => {
   GAInstance.changeZSpace(true);
