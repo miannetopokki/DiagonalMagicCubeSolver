@@ -160,3 +160,23 @@ button:disabled {
     background-color: #222;
     color: #ffffff;
 }
+
+
+#loading {
+    position: fixed;              /* Fix the position to the viewport */
+    left: 0;                      /* Align to the left */
+    top: 0;                       /* Align to the top */
+    width: 100vw;                 /* Full width of the viewport */
+    height: 100vh;                /* Full height of the viewport */
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white background */
+    display: flex;                /* Use flexbox for alignment */
+    justify-content: center;      /* Center horizontally */
+    align-items: center;          /* Center vertically */
+    z-index: 1000;                /* Keep it on top of other content */
+}
+
+#loading img {
+    width: 150px;                 /* Width of the loading GIF */
+    height: 150px;                /* Height of the loading GIF */
+    margin-top: 400px;
+}

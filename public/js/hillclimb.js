@@ -6,11 +6,18 @@ class HillClimb extends MagicCube {
     constructor() {
         super();
     }
+    showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+    
+    hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+    }
     
 
 
     async solveSteepHC(cubeState) { 
-   
+        this.showLoading();
         try {
             const response = await fetch('/api/steephc', {
                 method: 'POST',
@@ -46,9 +53,13 @@ class HillClimb extends MagicCube {
 
         } catch (error) {
             console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
         }
+        
     }
     async solveSidewayHC(cubeState,maxsidewaysMove) {
+        this.showLoading();
         try {
             const response = await fetch('/api/sidewaysmove', {
                 method: 'POST',
@@ -84,11 +95,13 @@ class HillClimb extends MagicCube {
 
         } catch (error) {
             console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
         }
 
     }
     async solveRandomRestartHC(cubeState,maxRestarts) {
-
+        this.showLoading();
   
         try {
             const response = await fetch('/api/randomrestartHC', {
@@ -130,9 +143,12 @@ class HillClimb extends MagicCube {
 
         } catch (error) {
             console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
         }
     }
     async solveStochasticHC(cubeState){
+        this.showLoading();
         try {
             const response = await fetch('/api/stochastichc', {
                 method: 'POST',
@@ -177,6 +193,7 @@ class HillClimb extends MagicCube {
 
     }
     async solveStochasticHC(cubeState){
+        this.showLoading();
         try {
             const response = await fetch('/api/stochastichc', {
                 method: 'POST',
@@ -211,6 +228,8 @@ class HillClimb extends MagicCube {
 
         } catch (error) {
             console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
         }
         
 

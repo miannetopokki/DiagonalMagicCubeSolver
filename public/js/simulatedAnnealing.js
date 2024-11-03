@@ -5,8 +5,17 @@ class SimulatedAnnealing extends MagicCube {
     constructor() {
         super();
     }
+    showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+    
+    hideLoading() {
+        document.getElementById('loading').style.display = 'none';
+    }
+    
 
     async solveSA(cubeState) { 
+        this.showLoading();
         try {
             const response = await fetch('/api/simulatedAnnealing', {
                 method: 'POST',
@@ -96,7 +105,10 @@ class SimulatedAnnealing extends MagicCube {
 
         } catch (error) {
             console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
         }
+        
     }
 
     solveCube() {
