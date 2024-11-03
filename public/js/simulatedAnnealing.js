@@ -141,7 +141,7 @@ function onReplayButtonClick() {
     });
 }
 function toggleButtons(disabled) {
-    const buttons = document.querySelectorAll('button:not(#generateCubeButton)');
+    const buttons = document.querySelectorAll('button:not(#generateCubeButton):not(#plot)');
     buttons.forEach(button => {
         button.disabled = disabled;
     });
