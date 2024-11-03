@@ -34,8 +34,9 @@ class SimulatedAnnealing extends MagicCube {
             document.getElementById('hBeforeValue').innerText = h_before;
             document.getElementById('hAfterValue').innerText = h_after;
             document.getElementById('algoritma').innerText = algoritma;
-            document.getElementById('iterasi').innerText = `Iterasi : ${n_iter}`;
-            document.getElementById('stuck_freq').innerText = `stuck_freq : ${stuck_freq}`;
+            document.getElementById('waktuEksekusiSpan').innerText = execution_time;
+            document.getElementById('iterasiSpan').innerText = n_iter;
+            document.getElementById('stuck_freqSpan').innerText = stuck_freq;
             const annealingctx = document.getElementById('annealingChart').getContext('2d');
             const ObjectiveChart = document.getElementById('objectiveFunctionChart').getContext('2d');
             const annealingChart = new Chart(annealingctx, {

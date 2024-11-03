@@ -151,7 +151,7 @@ class Cube {
                     [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
                 }
                 this.iterasi++;
-                this.hValues.push(newH);
+                this.hValues.push(currentH * (-1));
                 if(diffH>0){
                     this.e_values.push(0);
                 }else{
