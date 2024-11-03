@@ -7,6 +7,7 @@ class Cube {
         this.iterasi = 0;
         this.maxIterasi = 12000; //buat stochastic
         this.hValues = [];
+        this.avgHValues = [];
         this.sequensElement = [];
         this.hValues = []; 
         this.e_values = [];
@@ -315,10 +316,14 @@ class Cube {
         do {
             // Fitness Function
             let fitnessScores = population.map(cubeState => this.calculateFitness(cubeState));
-            
+            let totalFitness = fitnessScores.reduce((sum, score) => sum + score, 0);
+            let averageFitness = totalFitness / fitnessScores.length;
+            this.avgHValues.push(averageFitness*(-1));
+
             // Check if we found a solution
             let bestFitness = Math.min(...fitnessScores);
             this.hValues.push(bestFitness * (-1));
+            
             let bestIndex = fitnessScores.indexOf(bestFitness);
             if (bestFitness === 0) {
                 // Solution found
@@ -421,30 +426,33 @@ class Cube {
         }
         return [child1, child2];
     }
-
+    
+    timeBasedRandom(min, max) {
+        const randomValue = (Math.random() * Date.now()) % 1;
+        return Math.floor(randomValue * (max - min + 1)) + min;
+    }
     mutate(cubeState) {
         // Swap two random elements in the cube
-        let i1 = Math.floor(Math.random() * 5);
-        let j1 = Math.floor(Math.random() * 5);
-        let k1 = Math.floor(Math.random() * 5);
-        let i2 = Math.floor(Math.random() * 5);
-        let j2 = Math.floor(Math.random() * 5);
-        let k2 = Math.floor(Math.random() * 5);
+        let i1 = this.timeBasedRandom(0, 4);
+        let j1 = this.timeBasedRandom(0, 4);
+        let k1 = this.timeBasedRandom(0, 4);
+        let i2 = this.timeBasedRandom(0, 4);
+        let j2 = this.timeBasedRandom(0, 4);
+        let k2 = this.timeBasedRandom(0, 4);
 
         [cubeState[i1][j1][k1], cubeState[i2][j2][k2]] = [cubeState[i2][j2][k2], cubeState[i1][j1][k1]];
         return cubeState;
     }
-
     randomizeCube(cubeState) {
         while (true) {
             // tukar 2 angka
-            let i = Math.floor(Math.random() * 5);
-            let j = Math.floor(Math.random() * 5);
-            let k = Math.floor(Math.random() * 5);
+            let i = this.timeBasedRandom(0, 4);
+            let j = this.timeBasedRandom(0, 4);
+            let k = this.timeBasedRandom(0, 4);
     
-            let x = Math.floor(Math.random() * 5);
-            let y = Math.floor(Math.random() * 5);
-            let z = Math.floor(Math.random() * 5);
+            let x = this.timeBasedRandom(0, 4);
+            let y = this.timeBasedRandom(0, 4);
+            let z = this.timeBasedRandom(0, 4);
             if (i !== x || j !== y || k !== z) {
                 [cubeState[i][j][k], cubeState[x][y][z]] = [cubeState[x][y][z], cubeState[i][j][k]];
                 return cubeState;
@@ -476,6 +484,9 @@ class Cube {
     }
     getSeqElement(){
         return this.sequensElement;
+    }
+    getAVGHValues() {
+        return this.avgHValues;
     }
 }
 export function solveStochasticHC(req,res){
@@ -686,7 +697,7 @@ export function solveSidewaysHC(req, res) {
 
 export function solveGeneticAlgorithm(req, res) {
     const { cubeState, jumlahIterasi, banyakPopulasi } = req.body;
-
+    
     if (!cubeState || !Array.isArray(cubeState)) {
         return res.status(400).json({
             success: false,
@@ -708,7 +719,7 @@ export function solveGeneticAlgorithm(req, res) {
     // const sequensElement = magicCube.getSeqElement();
 
     const hValues = magicCube.getHValues(1);  //ambil tiap 100 iterasi, kalo semua ngelag
-
+    const avgHValues = magicCube.getAVGHValues();
 
     res.json({
         message: "Kubus berhasil diselesaikan",
@@ -719,6 +730,7 @@ export function solveGeneticAlgorithm(req, res) {
         h_after: objFuncAfter,
         magic_number: magicnum,
         h_values: hValues,
+        avg_h_values:avgHValues,
         execution_time: executionTime
     });
 }

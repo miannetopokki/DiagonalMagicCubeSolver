@@ -41,6 +41,7 @@ class MagicCube {
         this.cubePositions = {}; // Initialize an object to track cube positions
         this.isReplayed = false;
         this.hValues = null;
+        this.avghvalues = null;
 
         this.initializeReplayCubeScene();
         this.initializeScene();
@@ -78,6 +79,44 @@ class MagicCube {
                     },
                     y: {
                         title: { display: true, text: 'Objective Function (h)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        ticks: { color: '#ffffff' }
+                    }
+                }
+            }
+        });
+    }
+    plotAVGObjectiveFunction(hValues) {
+        this.avghvalues = hValues;
+        const ctx = document.getElementById('avgobjectiveFunctionChart').getContext('2d');
+
+        // Jika chart sudah ada, hancurkan terlebih dahulu
+        if (this.avgobjectiveFunctionChart) {
+            this.avgobjectiveFunctionChart.destroy();
+        }
+
+        // Buat chart baru dan simpan referensinya di 'this.avgobjectiveFunctionChart'
+        this.avgobjectiveFunctionChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: Array.from({ length: hValues.length }, (_, i) => i + 1),
+                datasets: [{
+                    label: 'Average Objective Function (h) per 100 Iteration',
+                    data: hValues,
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    fill: false
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Iteration' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        ticks: { color: '#ffffff' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Average Objective Function (h)' },
                         grid: { color: 'rgba(255, 255, 255, 0.2)' },
                         ticks: { color: '#ffffff' }
                     }

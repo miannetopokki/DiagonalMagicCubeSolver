@@ -42,6 +42,7 @@ class GeneticAlgorithm extends MagicCube {
         algoritma,
         n_iter,
         h_values,
+        avg_h_values,
         execution_time,
       } = result;
       this.solvedCubeState = solvedCube;
@@ -61,6 +62,7 @@ class GeneticAlgorithm extends MagicCube {
       );
 
       this.plotObjectiveFunction(h_values);
+      this.plotAVGObjectiveFunction(avg_h_values);
 
       document.getElementById("hBeforeValue").innerText = h_before;
       document.getElementById("hAfterValue").innerText = h_after;
