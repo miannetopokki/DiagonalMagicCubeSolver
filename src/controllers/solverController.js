@@ -14,6 +14,8 @@ class Cube {
 
     objectiveFunction() {
         this.h = 0;
+    
+        // Cek setiap baris di setiap level
         for (let i = 0; i < this.n; i++) {
             for (let j = 0; j < this.n; j++) {
                 let rowSum = 0;
@@ -26,6 +28,8 @@ class Cube {
                 this.h += Math.abs(colSum - this.magicNumber);
             }
         }
+    
+        // Cek setiap pilar (melalui level)
         for (let j = 0; j < this.n; j++) {
             for (let k = 0; k < this.n; k++) {
                 let pillarSum = 0;
@@ -35,7 +39,8 @@ class Cube {
                 this.h += Math.abs(pillarSum - this.magicNumber);
             }
         }
-
+    
+        // Cek diagonal di setiap level (2 diagonal per level)
         for (let i = 0; i < this.n; i++) {
             let diag1Sum = 0;
             let diag2Sum = 0;
@@ -46,8 +51,32 @@ class Cube {
             this.h += Math.abs(diag1Sum - this.magicNumber);
             this.h += Math.abs(diag2Sum - this.magicNumber);
         }
+    
+        // Cek diagonal vertikal (melalui level)
+        for (let j = 0; j < this.n; j++) {
+            let vertDiag1 = 0;
+            let vertDiag2 = 0;
+            for (let i = 0; i < this.n; i++) {
+                vertDiag1 += this.cube[i][i][j];
+                vertDiag2 += this.cube[i][this.n - i - 1][j];
+            }
+            this.h += Math.abs(vertDiag1 - this.magicNumber);
+            this.h += Math.abs(vertDiag2 - this.magicNumber);
+        }
+    
+        // Cek big diagonal di seluruh kubus
+        let bigDiag1 = 0;
+        let bigDiag2 = 0;
+        for (let i = 0; i < this.n; i++) {
+            bigDiag1 += this.cube[i][i][i];
+            bigDiag2 += this.cube[i][i][this.n - i - 1];
+        }
+        this.h += Math.abs(bigDiag1 - this.magicNumber);
+        this.h += Math.abs(bigDiag2 - this.magicNumber);
+    
         return this.h;
     }
+    
 
 
     steepestAscentHillClimbing() {
