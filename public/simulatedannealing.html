@@ -64,28 +64,31 @@
 
                 <p id="stuck_freq">Stuck Frequency: <span id="stuck_freqSpan">-</span></p>
             </section>
-            <div class="cube-item">
-                <h2>Replay</h2>
-                <div>
-                    <section class="desc-container">
-                        <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
-                        <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
-        
-                    </section>
-                    <section class="desc-container">
-                        <input type="range" id="speedSlider" min="1" max="10" value="1" />
-                        <label for="speedSlider">Speed: <span id="currentSpeed">1</span></label>
-                    </section>
-                </div>
-                <div id="replayCubeContainer">
-    
-                </div>
-    
-            </div>
+            
+        </div>
+        <div class="cube-item">
+            <h2>Replay</h2>
             <div>
+                <!-- <section class="desc-container">
+                    <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
+                    <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
+    
+                </section> -->
+                <section class="desc-container">
+                    <input type="range" id="speedSlider" min="1" max="10" value="1" />
+                    <label for="speedSlider">Speed: <span id="currentSpeed">1</span></label>
+                </section>
+            </div>
+            <div id="replayCubeContainer">
+            </div>
+
+        </div>
+        <div>
+            <h2>Plot</h2>
             <canvas id="objectiveFunctionChart"></canvas>
             <canvas id="annealingChart"></canvas>
         </div>
+        
     </section>
 </body>
 </html>

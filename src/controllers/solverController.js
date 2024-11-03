@@ -5,6 +5,7 @@ class Cube {
         this.cube = cubeState;
         this.h = 0;
         this.iterasi = 0;
+        this.maxIterasi = 12000; //buat stochastic
         this.hValues = [];
         this.sequensElement = [];
         this.hValues = []; 
@@ -124,34 +125,38 @@ class Cube {
     }
     stochasticHillClimbing() {
         let currentH = this.objectiveFunction();
-        const maxIterations = 12000;
-
-        do {
-            improved = false;
-            console.log(this.iterasi);
-            let i = Math.floor(Math.random() * 5);
-            let j = Math.floor(Math.random() * 5);
-            let k = Math.floor(Math.random() * 5);
-
-            let x = Math.floor(Math.random() * 5);
-            let y = Math.floor(Math.random() * 5);
-            let z = Math.floor(Math.random() * 5);
-
-            if (i !== x || j !== y || k !== z) {
-                [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
-                let newH = this.objectiveFunction();
-                let diffH = currentH - newH;
-                if (newH < currentH) {
-                    currentH = newH;
-                } else {
-                    [this.cube[i][j][k], this.cube[x][y][z]] = [this.cube[x][y][z], this.cube[i][j][k]];
-
-                }
+        for (let i = 0; i < this.maxIterasi; i++) {
+            let pos1 = Math.floor(Math.random() * (this.n * this.n * this.n));
+            let pos2;
+            do {
+                pos2 = Math.floor(Math.random() * (this.n * this.n * this.n));
+            } while (pos1 === pos2);
+    
+            const x1 = Math.floor(pos1 / (this.n * this.n));
+            const y1 = Math.floor((pos1 % (this.n * this.n)) / this.n);
+            const z1 = pos1 % this.n;
+    
+            const x2 = Math.floor(pos2 / (this.n * this.n));
+            const y2 = Math.floor((pos2 % (this.n * this.n)) / this.n);
+            const z2 = pos2 % this.n;
+    
+            [this.cube[x1][y1][z1], this.cube[x2][y2][z2]] = [this.cube[x2][y2][z2], this.cube[x1][y1][z1]];
+    
+            const newH = this.objectiveFunction();
+    
+            if (newH < currentH) {
+                currentH = newH;
+                this.sequensElement.push([[x1, y1, z1], [x2, y2, z2], [this.cube[x2][y2][z2], this.cube[x1][y1][z1]]]);
+                this.hValues.push(currentH * (-1));
                 this.iterasi++;
+            } else {
+                [this.cube[x1][y1][z1], this.cube[x2][y2][z2]] = [this.cube[x2][y2][z2], this.cube[x1][y1][z1]];
             }
-        } while (this.iterasi < maxIterations);
+        }
         return this.cube;
+    
     }
+    
     simulatedAnnealing() {
         let currentH = this.objectiveFunction();
         let Tvalue = 1000;
@@ -307,8 +312,6 @@ class Cube {
     getH(){
         return this.h;
     }
-
-
     getObjective() {
         return this.objectiveFunction();
     }
@@ -331,7 +334,43 @@ class Cube {
         return this.sequensElement;
     }
 }
+export function solveStochasticHC(req,res){
+    const { cubeState } = req.body;
+    if (!cubeState || !Array.isArray(cubeState)) {
+        return res.status(400).json({
+            success: false,
+            message: "Invalid cube state provided"
+        });
+    }
+    const magicCube = new Cube(cubeState.length, cubeState);
+    const objFuncBefore = magicCube.getObjective();
 
+    const startTime = Date.now();
+    const solvedCube = magicCube.stochasticHillClimbing();
+    const endTime = Date.now();
+    const executionTime = endTime - startTime;
+
+    const objFuncAfter = magicCube.getObjective();
+    const magicnum = magicCube.getMagicNumber();
+    const iter = magicCube.getIterasi();
+    const sequensElement = magicCube.getSeqElement();
+
+    const hValues = magicCube.getHValues(1);
+    res.json({
+        message: "Kubus berhasil diselesaikan",
+        algoritma: "Stochastic Hill Climb",
+        n_iter: iter,
+        solvedCube,
+        h_before: objFuncBefore,
+        h_after: objFuncAfter,
+        magic_number: magicnum,
+        h_values: hValues,
+        execution_time: executionTime,
+        seq_elemen: sequensElement
+    });
+
+
+}
 export function solveSteepHC(req, res) {
     const { cubeState } = req.body;
 
@@ -448,7 +487,7 @@ export function solveRandomRestartHC(req, res) {
 
     res.json({
         message: "Cube successfully solved",
-        algorithm: "Random Restart Hill Climb",
+        algoritma: "Random Restart Hill Climb",
         n_iter: iter,
         solvedCube,
         h_before: objFuncBefore,

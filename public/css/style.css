@@ -1,3 +1,4 @@
+/* Style umum */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -7,6 +8,7 @@ body {
     align-items: center;
 }
 
+/* Navbar */
 .navbar {
     display: flex;
     justify-content: center;
@@ -30,17 +32,19 @@ body {
     border-radius: 4px;
 }
 
-h1,h2 {
+/* Header */
+h1, h2 {
     font-size: 1.5em;
     text-align: center;
-    color: #333;
+    color: #ffffff;
 }
 
+/* Container utama untuk cube dan plot */
 .cube-container {
     display: flex;
     justify-content: space-around;
     width: auto;
-    margin: 20px 0;
+    margin: 80px 0 20px;
     flex-direction: column;
     padding: 10px;
     background-color: #000000;
@@ -48,15 +52,15 @@ h1,h2 {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Cube item */
 .cube-item {
     flex: 1;
     margin: 0 10px;
-    padding: 10px;
+    padding: 15px;
     text-align: center;
-    border: 1px solid #000000;
     border-radius: 8px;
     background-color: #000000;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 #cubeContainer,
@@ -73,39 +77,36 @@ h1,h2 {
 
 .desc-container {
     font-size: 0.9em;
-    color: #666;
+    color: #ccc;
     margin-top: 10px;
 }
 
+/* Button container */
 .button-container {
-    background-color: #000000;
+    background-color: #111;
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    width: 100px;
-    padding: 20px;
-    position: fixed;
-    z-index: 1000;
-    top: 40px;
-    gap: 20px;
     flex-direction: column;
-    left: 5px;
-
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    z-index: 1000;
 }
 
 button {
     padding: 10px 15px;
-    margin: 0 5px;
+    margin: 5px 0;
     border: none;
     border-radius: 5px;
     background-color: #091d31;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-.offset{
-    display: flex;
-    flex-direction: row;
+    width: 100%;
 }
 
 button:hover {
@@ -115,4 +116,38 @@ button:hover {
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+/* Offset button group */
+.offset {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+/* HC-list styling */
+#hc-list,
+#algo-list
+ {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #222;
+    color: #ffffff;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+#algo-list{
+    width: 30%;
+}
+
+#hc-list:hover {
+    background-color: #333;
+}
+
+#hc-list option {
+    background-color: #222;
+    color: #ffffff;
 }

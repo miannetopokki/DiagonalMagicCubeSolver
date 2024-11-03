@@ -43,10 +43,10 @@
 
         <button id="solveCubeButton">Solve</button>
         <select id="hc-list" onchange="handleSelection(this.value);">
-            <option value="">Select</option>
             <option value="1">Steepest Ascent</option>
             <option value="2">Random Restart</option>
             <option value="3">Sideway</option>
+            <option value="4">Stochastic</option>
         </select>        
         <button id="replay">Replay</button>
 
@@ -73,10 +73,10 @@
         <div class="cube-item">
             <h2>Replay</h2>
             <div>
-                <section class="desc-container">
+                <!-- <section class="desc-container">
                     <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
                     <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
-                </section>
+                </section> -->
                 <section class="desc-container">
                     <input type="range" id="speedSlider" min="1" max="10" value="1" />
                     <label for="speedSlider">Speed: <span id="currentSpeed">1</span></label>

@@ -13,15 +13,6 @@ app.use('/api', apiRoutes);
 app.get('/hillclimb', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'hillclimb.html'));
 });
-
-app.get('/sidewaysmove', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'hillclimb.html'));
-});
-
-app.get('/randomrestartHC', (req, res) => {
-    res.sendFile(path.join(__dirname, 'public', 'hillclimb.html'));
-});
-
 app.get('/simulatedannealing', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'simulatedannealing.html'));
 });
