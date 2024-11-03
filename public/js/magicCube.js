@@ -47,8 +47,14 @@ class MagicCube {
     }
     plotObjectiveFunction(hValues) {
         const ctx = document.getElementById('objectiveFunctionChart').getContext('2d');
-
-        new Chart(ctx, {
+    
+        // Jika chart sudah ada, hancurkan terlebih dahulu
+        if (this.objectiveFunctionChart) {
+            this.objectiveFunctionChart.destroy();
+        }
+    
+        // Buat chart baru dan simpan referensinya di 'this.objectiveFunctionChart'
+        this.objectiveFunctionChart = new Chart(ctx, {
             type: 'line',
             data: {
                 labels: Array.from({ length: hValues.length }, (_, i) => i + 1),
@@ -62,30 +68,21 @@ class MagicCube {
             options: {
                 responsive: true,
                 scales: {
-                    x: { title: { display: true, text: 'Iteration' } },
-                    y: { title: { display: true, text: 'Objective Function (h)' } }
-                },
-                scales: {
                     x: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.2)'
-                        },
-                        ticks: {
-                            color: '#ffffff'
-                        }
+                        title: { display: true, text: 'Iteration' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        ticks: { color: '#ffffff' }
                     },
                     y: {
-                        grid: {
-                            color: 'rgba(255, 255, 255, 0.2)'
-                        },
-                        ticks: {
-                            color: '#ffffff'
-                        }
+                        title: { display: true, text: 'Objective Function (h)' },
+                        grid: { color: 'rgba(255, 255, 255, 0.2)' },
+                        ticks: { color: '#ffffff' }
                     }
                 }
             }
         });
     }
+    
 
     initializeScene() {
         this.scene = new THREE.Scene();
@@ -120,7 +117,7 @@ class MagicCube {
         this.solvedRenderer.setSize(window.innerWidth / 1.35, window.innerHeight / 1.35);
         document.getElementById('solvedCubeContainer').appendChild(this.solvedRenderer.domElement);
         this.isSolved = false;
-        this.solvedCamera.position.copy(this.startPosition);
+        this.solvedCamera.position.copy(this.targetPosition);
 
         const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
         this.solvedScene.add(ambientLight);

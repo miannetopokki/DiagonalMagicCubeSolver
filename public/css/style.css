@@ -1,3 +1,4 @@
+/* Style umum */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -6,7 +7,16 @@ body {
     flex-direction: column;
     align-items: center;
 }
+body {
+    font-family: Arial, sans-serif;
+    background: radial-gradient(circle at center, #000000, #001120, #000000);
+    color: #ffffff;
+    text-align: center;
+    padding: 20px;
+}
 
+
+/* Navbar */
 .navbar {
     display: flex;
     justify-content: center;
@@ -14,6 +24,7 @@ body {
     background-color: #333;
     padding: 10px;
     position: fixed;
+    gap: 30px;
     top: 0;
     width: 100%;
     z-index: 1000;
@@ -30,17 +41,19 @@ body {
     border-radius: 4px;
 }
 
-h1,h2 {
+/* Header */
+h1, h2 {
     font-size: 1.5em;
     text-align: center;
-    color: #333;
+    color: #ffffff;
 }
 
+/* Container utama untuk cube dan plot */
 .cube-container {
     display: flex;
     justify-content: space-around;
     width: auto;
-    margin: 20px 0;
+    margin: 80px 0 20px;
     flex-direction: column;
     padding: 10px;
     background-color: #000000;
@@ -48,15 +61,15 @@ h1,h2 {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
+/* Cube item */
 .cube-item {
     flex: 1;
     margin: 0 10px;
-    padding: 10px;
+    padding: 15px;
     text-align: center;
-    border: 1px solid #000000;
     border-radius: 8px;
     background-color: #000000;
-    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 1px 5px rgba(0, 0, 0, 0.2);
 }
 
 #cubeContainer,
@@ -71,41 +84,77 @@ h1,h2 {
     position: relative;
 }
 
-.desc-container {
-    font-size: 0.9em;
-    color: #666;
-    margin-top: 10px;
+.float-container {
+    position: fixed; /* Keep the float container fixed */
+    top: 70px; /* Adjust position from the top */
+    right: 15px; /* Adjust position from the right */
+    z-index: 1000; /* Keep it above other content */
+    display: flex; /* Use flexbox for layout */
+    flex-direction: column; /* Stack child elements vertically */
+    gap: 15px; /* Space between child sections */
+    max-width: 220px; /* Set maximum width */
 }
 
-.button-container {
-    background-color: #000000;
+.desc-container {
+    font-size: 1em; /* Slightly increase the font size for better readability */
+    color: #e0e0e0; /* A lighter shade of grey for improved contrast */
+    background-color: #222; /* Darker background for better contrast */
     display: flex;
-    justify-content: center;
-    margin-top: 20px;
-    width: 100px;
-    padding: 20px;
-    position: fixed;
-    z-index: 1000;
-    top: 40px;
-    gap: 20px;
     flex-direction: column;
-    left: 5px;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 20px; /* Increased padding for a more spacious feel */
+    border-radius: 10px; /* Slightly larger border radius */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow for a more pronounced effect */
+    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+}
 
+.slider-container {
+    background-color: #222; /* Match background with desc-container */
+    padding: 10px; /* Add padding */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Light shadow */
+}
+
+.desc-container p {
+    margin: 0; /* Remove default margin */
+    padding: 5px; /* Add padding to each paragraph */
+    border-left: 4px solid #1d0c33; /* Add a left border for emphasis */
+    background-color: rgba(0, 0, 0, 0.3); /* Slightly transparent background for paragraphs */
+    border-radius: 4px; /* Rounded corners for paragraphs */
+}
+
+.desc-container p span {
+    font-weight: bold; /* Make span text bold for emphasis */
+}
+
+
+/* Button container */
+.button-container {
+    background-color: #111;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    position: fixed;
+    top: 80px;
+    left: 10px;
+    z-index: 1000;
 }
 
 button {
     padding: 10px 15px;
-    margin: 0 5px;
+    margin: 5px 0;
     border: none;
     border-radius: 5px;
     background-color: #091d31;
     color: white;
     cursor: pointer;
     transition: background-color 0.3s;
-}
-.offset{
-    display: flex;
-    flex-direction: row;
+    width: 100%;
 }
 
 button:hover {
@@ -115,4 +164,58 @@ button:hover {
 button:disabled {
     background-color: #ccc;
     cursor: not-allowed;
+}
+
+/* Offset button group */
+.offset {
+    display: flex;
+    gap: 10px;
+    width: 100%;
+}
+
+/* HC-list styling */
+#hc-list,
+#algo-list
+ {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #555;
+    border-radius: 5px;
+    background-color: #222;
+    color: #ffffff;
+    font-size: 1em;
+    transition: background-color 0.3s;
+    cursor: pointer;
+}
+#algo-list{
+    width: 30%;
+}
+
+#hc-list:hover {
+    background-color: #333;
+}
+
+#hc-list option {
+    background-color: #222;
+    color: #ffffff;
+}
+
+
+#loading {
+    position: fixed;              /* Fix the position to the viewport */
+    left: 0;                      /* Align to the left */
+    top: 0;                       /* Align to the top */
+    width: 100vw;                 /* Full width of the viewport */
+    height: 100vh;                /* Full height of the viewport */
+    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white background */
+    display: flex;                /* Use flexbox for alignment */
+    justify-content: center;      /* Center horizontally */
+    align-items: center;          /* Center vertically */
+    z-index: 1000;                /* Keep it on top of other content */
+}
+
+#loading img {
+    width: 150px;                 /* Width of the loading GIF */
+    height: 150px;                /* Height of the loading GIF */
+    margin-top: 400px;
 }

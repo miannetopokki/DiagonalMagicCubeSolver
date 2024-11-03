@@ -17,7 +17,6 @@ app.get('/hillclimb', (req, res) => {
 app.get('/sidewaysmove', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'hillclimb.html'));
 });
-
 app.get('/randomrestartHC', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'hillclimb.html'));
 });

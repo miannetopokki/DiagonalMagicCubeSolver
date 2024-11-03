@@ -14,8 +14,14 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
+    <div id="loading" style="display: none;">
+        <img src="images/load.gif" alt="Loading..." />
+    </div>
     <nav class="navbar">
-        <label for="algo-list">Select Algorithm:</label>
+        <div>
+        <button onclick="location.href='index.html'">Home</button>
+
+        </div>
         <select id="algo-list" onchange="location = this.value;">
             <option value="/">Select</option>
             <option value="/hillclimb">Hill Climb</option>
@@ -24,6 +30,39 @@
         </select>
     </nav>
     <h1>Magic Cube Solver - Simulated Annealing</h1>
+    <section class="float-container">
+        <section class="desc-container">
+            <div>
+                <p id="algoritma">Algorithm: <span id="algoritmaSpan">-</span></p>
+            </div>
+            <div>
+                <p id="hBeforeText">H Before: <span id="hBeforeValue">-</span></p>
+            </div>
+            <div>
+                <p id="hAfterText">H After: <span id="hAfterValue">-</span></p>
+            </div>
+            
+            <div>
+                <p id="iterasi">Iterations: <span id="iterasiSpan">-</span></p>
+            </div>
+            <div>
+                <p id="waktuEksekusi">Waktu Eksekusi: <span id="waktuEksekusiSpan">-</span> ms</p>
+            </div>
+            <div>
+                <p id="stuck_freq">Stuck Frequency: <span id="stuck_freqSpan">-</span></p>
+
+            </div>
+            <div id="jumlahRestart" style="display: none;">
+                <p>Jumlah Restart: <span id="jumlahRestartValue">-</span></p>
+            </div>
+            
+        </section>
+        <section class="slider-container">
+            <label for="speedSlider">Speed: <span id="currentSpeed">1</span></label>
+            <input type="range" id="speedSlider" min="1" max="10" value="1" />
+        </section>
+    </section>
+    
     <section class="button-container">
         <button id="generateCubeButton" onclick="location.href='/simulatedannealing'">Generate Random Cube State</button>
         <section class="offset">
@@ -44,48 +83,43 @@
 
         <button id="solveCubeButton">Solve</button>
         <button id="replay">Replay</button>
+        <button id= "plot" onclick="scrollToPlot()">Plot</button>
     </section>
     <section class="cube-container">
         <div class="cube-item">
             <h2>Initial State</h2>
             <div id="cubeContainer"></div>
-            <section class="desc-container">
-                <p id="hBeforeText">H Before: <span id="hBeforeValue">-</span></p>
-            </section>
         </div>
         <div class="cube-item">
             <h2>Solved State</h2>
-            <div id="solvedCubeContainer"></div>
-            <section class="desc-container">
-                <p id="hAfterText">H After: <span id="hAfterValue">-</span></p>
-                <p id="algoritma">Algorithm: <span id="algoritmaSpan">-</span></p>
-                <p id="iterasi">Iterations: <span id="iterasiSpan">-</span></p>
-                <p id="waktuEksekusi">Waktu Eksekusi: <span id="waktuEksekusiSpan">-</span> ms</p>
-
-                <p id="stuck_freq">Stuck Frequency: <span id="stuck_freqSpan">-</span></p>
-            </section>
-            <div class="cube-item">
-                <h2>Replay</h2>
-                <div>
-                    <section class="desc-container">
-                        <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
-                        <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
-        
-                    </section>
-                    <section class="desc-container">
-                        <input type="range" id="speedSlider" min="1" max="10" value="1" />
-                        <label for="speedSlider">Speed: <span id="currentSpeed">1</span></label>
-                    </section>
-                </div>
-                <div id="replayCubeContainer">
-    
-                </div>
-    
-            </div>
+            <div id="solvedCubeContainer"></div>            
+        </div>
+        <div class="cube-item">
+            <h2>Replay</h2>
             <div>
+                <!-- <section class="desc-container">
+                    <input type="range" id="iterationSlider" min="1" max="n_iterasi" value="1" />
+                    <label for="iterationSlider">Iteration: <span id="currentIteration">1</span></label>
+    
+                </section> -->
+            </div>
+            <div id="replayCubeContainer">
+            </div>
+        </div>
+        <div>
+            <h2>Plot</h2>
             <canvas id="objectiveFunctionChart"></canvas>
             <canvas id="annealingChart"></canvas>
         </div>
+        
     </section>
 </body>
+<script>
+    function scrollToPlot() {
+    const plotSection = document.getElementById('objectiveFunctionChart'); // Targeting the canvas for plotting
+    if (plotSection) {
+        plotSection.scrollIntoView({ behavior: 'smooth' }); // Smoothly scrolls to the plot section
+    }
+}
+</script>
 </html>

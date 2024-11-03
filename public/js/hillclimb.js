@@ -1,16 +1,23 @@
 // hillclimb.js
 import { MagicCube } from './magicCube.js';
 
-let index = 0;
+let index = 1;
 class HillClimb extends MagicCube {
     constructor() {
         super();
+    }
+    showLoading() {
+        document.getElementById('loading').style.display = 'block';
+    }
+    
+    hideLoading() {
+        document.getElementById('loading').style.display = 'none';
     }
     
 
 
     async solveSteepHC(cubeState) { 
-   
+        this.showLoading();
         try {
             const response = await fetch('/api/steephc', {
                 method: 'POST',
@@ -31,7 +38,7 @@ class HillClimb extends MagicCube {
             this.animationProgress = 0;
             this.sequensElement = seq_elemen;
 
-            this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
+            // this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
             this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
 
             this.plotObjectiveFunction(h_values);
@@ -41,14 +48,18 @@ class HillClimb extends MagicCube {
             document.getElementById('algoritmaSpan').innerText = algoritma;
             document.getElementById('iterasiSpan').innerText = n_iter;
             document.getElementById('waktuEksekusiSpan').innerText = execution_time;
-            document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
+            // document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
 
 
         } catch (error) {
             console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
         }
+        
     }
     async solveSidewayHC(cubeState,maxsidewaysMove) {
+        this.showLoading();
         try {
             const response = await fetch('/api/sidewaysmove', {
                 method: 'POST',
@@ -69,7 +80,7 @@ class HillClimb extends MagicCube {
             this.animationProgress = 0;
             this.sequensElement = seq_elemen;
 
-            this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
+            // this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
             this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
 
             this.plotObjectiveFunction(h_values);
@@ -79,16 +90,18 @@ class HillClimb extends MagicCube {
             document.getElementById('algoritmaSpan').innerText = algoritma;
             document.getElementById('iterasiSpan').innerText = n_iter;
             document.getElementById('waktuEksekusiSpan').innerText = execution_time;
-            document.getElementById('iterationSlider').max = n_iter; 
+            // document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
 
 
         } catch (error) {
             console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
         }
 
     }
     async solveRandomRestartHC(cubeState,maxRestarts) {
-
+        this.showLoading();
   
         try {
             const response = await fetch('/api/randomrestartHC', {
@@ -110,7 +123,7 @@ class HillClimb extends MagicCube {
             this.animationProgress = 0;
             this.sequensElement = seq_elemen;
 
-            this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
+            // this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
             this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
 
             this.plotObjectiveFunction(h_values);
@@ -125,12 +138,101 @@ class HillClimb extends MagicCube {
             document.getElementById('iterasiSpan').innerText = n_iter;
             document.getElementById('jumlahRestartValue').innerText = maxRestarts;
             document.getElementById('waktuEksekusiSpan').innerText = execution_time;
-            document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
+            // document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
+
+
+        } catch (error) {
+            console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
+        }
+    }
+    async solveStochasticHC(cubeState){
+        this.showLoading();
+        try {
+            const response = await fetch('/api/stochastichc', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cubeState, maxRestarts })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Hasil solusi dari server:', result);
+            const { solvedCube,seq_elemen, h_before, h_after, algoritma, n_iter,h_values,execution_time } = result;
+            this.solvedCubeState = solvedCube; 
+            this.animationProgress = 0;
+            this.sequensElement = seq_elemen;
+
+            // this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
+            this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
+            this.plotObjectiveFunction(h_values);
+
+            const jumlahRestartElement = document.getElementById('jumlahRestart');
+            jumlahRestartElement.style.display = 'block'; 
+
+
+            document.getElementById('hBeforeValue').innerText = h_before;
+            document.getElementById('hAfterValue').innerText = h_after;
+            document.getElementById('algoritmaSpan').innerText = algoritma;
+            document.getElementById('iterasiSpan').innerText = n_iter;
+            document.getElementById('jumlahRestartValue').innerText = maxRestarts;
+            document.getElementById('waktuEksekusiSpan').innerText = execution_time;
+            // document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
 
 
         } catch (error) {
             console.error('Error:', error);
         }
+        
+
+    }
+    async solveStochasticHC(cubeState){
+        this.showLoading();
+        try {
+            const response = await fetch('/api/stochastichc', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ cubeState })
+            });
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! Status: ${response.status}`);
+            }
+
+            const result = await response.json();
+            console.log('Hasil solusi dari server:', result);
+            const { solvedCube,seq_elemen, h_before, h_after, algoritma, n_iter,h_values,execution_time } = result;
+            this.solvedCubeState = solvedCube; 
+            this.animationProgress = 0;
+            this.sequensElement = seq_elemen;
+
+            // this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
+            this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
+            this.plotObjectiveFunction(h_values);
+
+            document.getElementById('hBeforeValue').innerText = h_before;
+            document.getElementById('hAfterValue').innerText = h_after;
+            document.getElementById('algoritmaSpan').innerText = algoritma;
+            document.getElementById('iterasiSpan').innerText = n_iter;
+            document.getElementById('waktuEksekusiSpan').innerText = execution_time;
+            // document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
+
+
+        } catch (error) {
+            console.error('Error:', error);
+        }finally {
+            this.hideLoading(); 
+        }
+        
+
     }
 
     solveCube(index) {
@@ -141,13 +243,22 @@ class HillClimb extends MagicCube {
         console.log("maxRestarts = ", maxRestarts);  
 
         if (index == 1){
+            console.log("Steep hc");
+
             this.solveSteepHC(this.cubeState);
         }
         else if(index == 2){
+            console.log("RR hc");
+
             this.solveRandomRestartHC(this.cubeState,maxRestarts);
         }
         else if(index == 3){
+            console.log("sideway hc");
+
             this.solveSidewayHC(this.cubeState,maxSidewaysMoves);
+        }else if(index ==4){
+            console.log("stochastic hc");
+            this.solveStochasticHC(this.cubeState);
         }
         this.isSolved = true; 
     }
@@ -168,18 +279,33 @@ replayButton.addEventListener("click", onReplayButtonClick.bind(this));
 function onReplayButtonClick() {
     console.log(hillClimbInstance.getSeqElementLength());
     if (hillClimbInstance.getSeqElementLength() === 0) {
-        alert(" Tidak ada replay yang dapat dilakukan,Silahkan solve dulu.");
+        alert("Tidak ada replay yang dapat dilakukan, silahkan solve dulu.");
         return; 
     }
 
-    hillClimbInstance.animateCubeMovement();
+    toggleButtons(true);
+
+    hillClimbInstance.animateCubeMovement().then(() => {
+        toggleButtons(false);
+    });
 }
+function toggleButtons(disabled) {
+    const buttons = document.querySelectorAll('button:not(#generateCubeButton):not(#plot)');
+    buttons.forEach(button => {
+        button.disabled = disabled;
+    });
+    
+    document.getElementById('hc-list').disabled = disabled;
+    // document.getElementById('iterationSlider').disabled = disabled;
+    document.getElementById('speedSlider').disabled = disabled;
+}
+
 const speedSlider = document.getElementById("speedSlider");
 const currentSpeedLabel = document.getElementById("currentSpeed");
 speedSlider.addEventListener("input", (event) => {
     const speedValue = event.target.value;
     hillClimbInstance.setSpeedDurasi(speedValue);
-    currentSpeedLabel.textContent = speedValue; // Perbarui label tampilan
+    currentSpeedLabel.textContent = speedValue;
 });
 document.getElementById('addX').addEventListener('click', () => {
     hillClimbInstance.changeXSpace(true);
@@ -204,13 +330,13 @@ document.getElementById('minusY').addEventListener('click', () => {
 
 
 // Event listener untuk slider
-const slider = document.getElementById('iterationSlider');
-const currentIterationLabel = document.getElementById('currentIteration');
-slider.addEventListener('input', (event) => {
-    const iteration = parseInt(event.target.value);
-    currentIterationLabel.textContent = iteration; // Update label iterasi
-    updateAnimation(iteration); // Panggil fungsi untuk memperbarui animasi
-});
+// const slider = document.getElementById('iterationSlider');
+// const currentIterationLabel = document.getElementById('currentIteration');
+// slider.addEventListener('input', (event) => {
+//     const iteration = parseInt(event.target.value);
+//     currentIterationLabel.textContent = iteration; // Update label iterasi
+//     updateAnimation(iteration); // Panggil fungsi untuk memperbarui animasi
+// });
 
 
 document.getElementById('addZ').addEventListener('click', () => {
@@ -240,6 +366,8 @@ function handleSelection(value) {
     else if (value === "3") {
         index = 3;
         sidewaysSliderSection.style.display = 'block';
+    }else if(value === "4"){
+        index = 4;
     }
 }
 function updateSliderValue(value) {
