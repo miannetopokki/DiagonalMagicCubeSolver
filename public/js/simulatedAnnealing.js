@@ -35,6 +35,7 @@ class SimulatedAnnealing extends MagicCube {
             this.solvedCubeState = solvedCube; 
             this.animationProgress = 0;
             this.sequensElement = seq_elemen;
+            this.hValues = h_values;
 
             // this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
             this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);

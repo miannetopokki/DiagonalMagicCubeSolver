@@ -40,6 +40,7 @@ class MagicCube {
         this.nsequence = 0;
         this.cubePositions = {}; // Initialize an object to track cube positions
         this.isReplayed = false;
+        this.hValues = null;
 
         this.initializeReplayCubeScene();
         this.initializeScene();
@@ -47,6 +48,7 @@ class MagicCube {
 
     }
     plotObjectiveFunction(hValues) {
+        this.hValues = hValues;
         const ctx = document.getElementById('objectiveFunctionChart').getContext('2d');
 
         // Jika chart sudah ada, hancurkan terlebih dahulu
@@ -198,6 +200,11 @@ class MagicCube {
         return new Promise((resolve) => {  
             let isAnimating = false;
             const progressBar = document.getElementById('progressBar');
+            const angka1 = document.getElementById('angka1');
+            const angka2 = document.getElementById('angka2');
+            const currenth = document.getElementById('hvalue');
+
+
             const totalSequences = this.sequensElement.length;
             let completedAnim = 0;
             console.log("Sedang replay");
@@ -217,8 +224,16 @@ class MagicCube {
 
                     const nilai1 = sequence[2][0];
                     const nilai2 = sequence[2][1];
+                    const hval = sequence[3] * (-1);
                     const cube1Key = `${nilai1}`;
                     const cube2Key = `${nilai2}`;
+
+                    angka1.innerText = nilai1;
+                    angka2.innerText = nilai2;
+                    currenth.innerText = hval;
+                  
+
+
 
                     const cube1 = this.replayscene.getObjectByName(cube1Key);
                     const cube2 = this.replayscene.getObjectByName(cube2Key);
@@ -235,15 +250,14 @@ class MagicCube {
 
                         const animate = (currentTime) => {
                             const elapsedTime = currentTime - startTime;
-                            const t = Math.min(elapsedTime / duration, 1); // Normalize
+                            const t = Math.min(elapsedTime / duration, 1); 
 
                             cube1.position.lerpVectors(originalPosition1, originalPosition2, t);
                             cube2.position.lerpVectors(originalPosition2, originalPosition1, t);
 
-                            // Update progress bar based on the current index
-                            const progressPercentage = ((index + t) / totalSequences) * 100; // Calculate progress
-                            progressBar.style.width = progressPercentage + '%'; // Update width
-                            progressBar.textContent = Math.round(progressPercentage) + '%'; // Update text
+                            const progressPercentage = ((index + t) / totalSequences) * 100; 
+                            progressBar.style.width = progressPercentage + '%'; 
+                            progressBar.textContent = completedAnim  + '/' + totalSequences; 
 
                             if (t < 1) {
                                 requestAnimationFrame(animate);
@@ -259,6 +273,8 @@ class MagicCube {
                                 if (completedAnim === totalSequences) {
                                     this.isReplayed = true;
                                     console.log("Beres replay");
+                                    progressBar.textContent = completedAnim  + '/' + totalSequences; 
+
                                     resolve();
 
                                 }

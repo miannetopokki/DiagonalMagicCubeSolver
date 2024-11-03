@@ -241,3 +241,33 @@ button:disabled {
     color: white;
     transition: width 0.4s ease; /* Smooth transition */
 }
+
+.replayinfo-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Space between elements */
+    background-color: #222; /* Dark background for contrast */
+    padding: 10px; /* Padding for spacing */
+    border-radius: 8px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Light shadow */
+}
+
+/* Styling for the number boxes */
+.number-box {
+    display: inline-block; /* Inline block for spacing */
+    width: 30px; /* Fixed width for cube-like appearance */
+    height: 30px; /* Fixed height for cube-like appearance */
+    background-color: #1d0c33; /* Dark cube background */
+    color: #ffffff; /* White text color */
+    text-align: center; /* Center the text */
+    line-height: 30px; /* Center text vertically */
+    border: 2px solid #4caf50; /* Green border for a nice contrast */
+    border-radius: 5px; /* Rounded corners */
+    font-weight: bold; /* Bold font for emphasis */
+}
+
+/* Hover effect for number boxes */
+.number-box:hover {
+    background-color: #4caf50; /* Change color on hover */
+    cursor: pointer; /* Pointer cursor on hover */
+}
