@@ -1,4 +1,4 @@
-/* Style umum */
+
 body {
     font-family: Arial, sans-serif;
     margin: 0;
@@ -16,7 +16,7 @@ body {
 }
 
 
-/* Navbar */
+
 .navbar {
     display: flex;
     justify-content: center;
@@ -41,14 +41,14 @@ body {
     border-radius: 4px;
 }
 
-/* Header */
+
 h1, h2 {
     font-size: 1.5em;
     text-align: center;
     color: #ffffff;
 }
 
-/* Container utama untuk cube dan plot */
+
 .cube-container {
     display: flex;
     justify-content: space-around;
@@ -61,7 +61,7 @@ h1, h2 {
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
 }
 
-/* Cube item */
+
 .cube-item {
     flex: 1;
     margin: 0 10px;
@@ -85,51 +85,51 @@ h1, h2 {
 }
 
 .float-container {
-    position: fixed; /* Keep the float container fixed */
-    top: 70px; /* Adjust position from the top */
-    right: 15px; /* Adjust position from the right */
-    z-index: 1000; /* Keep it above other content */
-    display: flex; /* Use flexbox for layout */
-    flex-direction: column; /* Stack child elements vertically */
-    gap: 15px; /* Space between child sections */
-    max-width: 220px; /* Set maximum width */
+    position: fixed; 
+    top: 70px; 
+    right: 15px; 
+    z-index: 1000; 
+    display: flex; 
+    flex-direction: column; 
+    gap: 15px; 
+    max-width: 220px; 
 }
 
 .desc-container {
-    font-size: 1em; /* Slightly increase the font size for better readability */
-    color: #e0e0e0; /* A lighter shade of grey for improved contrast */
-    background-color: #222; /* Darker background for better contrast */
+    font-size: 1em; 
+    color: #e0e0e0; 
+    background-color: #222; 
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 10px;
-    padding: 20px; /* Increased padding for a more spacious feel */
-    border-radius: 10px; /* Slightly larger border radius */
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Deeper shadow for a more pronounced effect */
-    transition: transform 0.3s ease; /* Smooth transition for hover effect */
+    padding: 20px; 
+    border-radius: 10px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); 
+    transition: transform 0.3s ease; 
 }
 
 .slider-container {
-    background-color: #222; /* Match background with desc-container */
-    padding: 10px; /* Add padding */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Light shadow */
+    background-color: #222; 
+    padding: 10px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
 }
 
 .desc-container p {
-    margin: 0; /* Remove default margin */
-    padding: 5px; /* Add padding to each paragraph */
-    border-left: 4px solid #1d0c33; /* Add a left border for emphasis */
-    background-color: rgba(0, 0, 0, 0.3); /* Slightly transparent background for paragraphs */
-    border-radius: 4px; /* Rounded corners for paragraphs */
+    margin: 0; 
+    padding: 5px; 
+    border-left: 4px solid #1d0c33; 
+    background-color: rgba(0, 0, 0, 0.3); 
+    border-radius: 4px; 
 }
 
 .desc-container p span {
-    font-weight: bold; /* Make span text bold for emphasis */
+    font-weight: bold; 
 }
 
 
-/* Button container */
+
 .button-container {
     background-color: #111;
     display: flex;
@@ -166,7 +166,7 @@ button:disabled {
     cursor: not-allowed;
 }
 
-/* Offset button group */
+
 .offset {
     display: flex;
     gap: 10px;
@@ -176,7 +176,7 @@ button:disabled {
     width: 100%;
 }
 
-/* HC-list styling */
+
 #hc-list,
 #algo-list
  {
@@ -205,21 +205,21 @@ button:disabled {
 
 
 #loading {
-    position: fixed;              /* Fix the position to the viewport */
-    left: 0;                      /* Align to the left */
-    top: 0;                       /* Align to the top */
-    width: 100vw;                 /* Full width of the viewport */
-    height: 100vh;                /* Full height of the viewport */
-    background-color: rgba(255, 255, 255, 0.3); /* Semi-transparent white background */
-    display: flex;                /* Use flexbox for alignment */
-    justify-content: center;      /* Center horizontally */
-    align-items: center;          /* Center vertically */
-    z-index: 1000;                /* Keep it on top of other content */
+    position: fixed;              
+    left: 0;                      
+    top: 0;                       
+    width: 100vw;                 
+    height: 100vh;                
+    background-color: rgba(255, 255, 255, 0.3); 
+    display: flex;                
+    justify-content: center;      
+    align-items: center;          
+    z-index: 1000;                
 }
 
 #loading img {
-    width: 150px;                 /* Width of the loading GIF */
-    height: 150px;                /* Height of the loading GIF */
+    width: 150px;                 
+    height: 150px;                
     margin-top: 400px;
 }
 .progress-container {
@@ -227,47 +227,59 @@ button:disabled {
     background-color: #eeeeee23;
     border-radius: 5px;
     overflow: hidden;
-    margin: 20px 0; /* Space between elements */
+    margin: 20px 0; 
     padding: 5px;
     max-width: 210px;
 }
 
 .progress-bar {
     height: 30px;
-    width: 0; /* Initial width */
-    background-color: #4caf50; /* Green color */
-    text-align: center; /* Centered text */
-    line-height: 30px; /* Center text vertically */
+    width: 0; 
+    background-color: #4caf50; 
+    text-align: center; 
+    line-height: 30px; 
     color: white;
-    transition: width 0.4s ease; /* Smooth transition */
+    transition: width 0.4s ease; 
 }
 
 .replayinfo-container {
     display: flex;
     flex-direction: column;
-    gap: 10px; /* Space between elements */
-    background-color: #222; /* Dark background for contrast */
-    padding: 10px; /* Padding for spacing */
-    border-radius: 8px; /* Rounded corners */
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Light shadow */
+    gap: 10px; 
+    background-color: #222; 
+    padding: 10px; 
+    border-radius: 8px; 
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); 
 }
 
-/* Styling for the number boxes */
+
 .number-box {
-    display: inline-block; /* Inline block for spacing */
-    width: 30px; /* Fixed width for cube-like appearance */
-    height: 30px; /* Fixed height for cube-like appearance */
-    background-color: #1d0c33; /* Dark cube background */
-    color: #ffffff; /* White text color */
-    text-align: center; /* Center the text */
-    line-height: 30px; /* Center text vertically */
-    border: 2px solid #4caf50; /* Green border for a nice contrast */
-    border-radius: 5px; /* Rounded corners */
-    font-weight: bold; /* Bold font for emphasis */
+    display: inline-block; 
+    width: 30px; 
+    height: 30px; 
+    background-color: #1d0c33; 
+    color: #ffffff; 
+    text-align: center; 
+    line-height: 30px; 
+    border: 2px solid #4caf50; 
+    border-radius: 5px; 
+    font-weight: bold; 
 }
 
-/* Hover effect for number boxes */
+
 .number-box:hover {
-    background-color: #4caf50; /* Change color on hover */
-    cursor: pointer; /* Pointer cursor on hover */
+    background-color: #4caf50; 
+    cursor: pointer; 
 }
+
+.title-page {
+    margin-top: 100px; 
+    font-size: 2.5em; 
+    font-weight: bold; 
+    color: #ffffff; 
+    text-shadow: 0 0 8px #2d1938, 0 0 15px #000000; /* Glow effect */
+    padding: 10px 20px;
+    border-radius: 8px;
+    background-color: rgba(0, 0, 0, 0.6); 
+}
+
