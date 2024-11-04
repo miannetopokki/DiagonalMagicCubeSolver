@@ -387,14 +387,16 @@ class Cube {
 
     selection(population,fitnessValues) {
         // Seleksi menggunakan random wheel
+        // Fitness score yang semakin dekat dengan 0 probabilitynya semakin besar
+        const minFitness = Math.min(...fitnessValues);
+        const adjustedFitnessValues = fitnessValues.map(fitness => fitness - minFitness + 1);
+        const totalAdjustedFitness = adjustedFitnessValues.reduce((sum, fitness) => sum + fitness, 0);
 
-        const totalFitness = fitnessValues.reduce((sum, fitness) => sum + fitness, 0);
-        const cumulativeProbabilities = [];
-        
         // Calculate cumulative probabilities
+        const cumulativeProbabilities = [];
         let cumulativeSum = 0;
-        for (let i = 0; i < fitnessValues.length; i++) {
-            cumulativeSum += fitnessValues[i] / totalFitness;
+        for (let i = 0; i < adjustedFitnessValues.length; i++) {
+            cumulativeSum += adjustedFitnessValues[i] / totalAdjustedFitness;
             cumulativeProbabilities[i] = cumulativeSum;
         }
         const matingPool = [];
