@@ -50,12 +50,12 @@ class GeneticAlgorithm extends MagicCube {
       this.animationProgress = 0;
       //   this.sequensElement = seq_elemen;
 
-      this.animateCamera(
-        this.solvedControls,
-        this.solvedCamera,
-        this.solvedRenderer,
-        this.solvedScene
-      );
+      // this.animateCamera(
+      //   this.solvedControls,
+      //   this.solvedCamera,
+      //   this.solvedRenderer,
+      //   this.solvedScene
+      // );
       this.visualizeCube(
         this.solvedCubeState,
         this.solvedScene,

@@ -155,51 +155,6 @@ class HillClimb extends MagicCube {
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify({ cubeState, maxRestarts })
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! Status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            console.log('Hasil solusi dari server:', result);
-            const { solvedCube,seq_elemen, h_before, h_after, algoritma, n_iter,h_values,execution_time } = result;
-            this.solvedCubeState = solvedCube; 
-            this.animationProgress = 0;
-            this.sequensElement = seq_elemen;
-
-            // this.animateCamera(this.solvedControls, this.solvedCamera, this.solvedRenderer, this.solvedScene);
-            this.visualizeCube(this.solvedCubeState, this.solvedScene,this.solvedControls);
-            this.plotObjectiveFunction(h_values);
-
-            const jumlahRestartElement = document.getElementById('jumlahRestart');
-            jumlahRestartElement.style.display = 'block'; 
-
-
-            document.getElementById('hBeforeValue').innerText = h_before;
-            document.getElementById('hAfterValue').innerText = h_after;
-            document.getElementById('algoritmaSpan').innerText = algoritma;
-            document.getElementById('iterasiSpan').innerText = n_iter;
-            document.getElementById('jumlahRestartValue').innerText = maxRestarts;
-            document.getElementById('waktuEksekusiSpan').innerText = execution_time;
-            // document.getElementById('iterationSlider').max = n_iter; // Set max value for the slider
-
-
-        } catch (error) {
-            console.error('Error:', error);
-        }
-        
-
-    }
-    async solveStochasticHC(cubeState){
-        this.showLoading();
-        try {
-            const response = await fetch('/api/stochastichc', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
                 body: JSON.stringify({ cubeState })
             });
 

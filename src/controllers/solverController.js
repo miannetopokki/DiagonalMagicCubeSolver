@@ -147,7 +147,7 @@ class Cube {
     
             if (newH < currentH) {
                 currentH = newH;
-                this.sequensElement.push([[i, j, k], [x, y, z], [this.cube[x][y][z], this.cube[i][j][k]],currentH]);
+                this.sequensElement.push([[x1, y1, z1], [x2, y2, z2], [this.cube[x2][y2][z2], this.cube[x1][y1][z1]],currentH]);
                 this.hValues.push(currentH * (-1));
                 this.iterasi++;
             } else {

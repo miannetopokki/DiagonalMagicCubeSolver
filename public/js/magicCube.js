@@ -4,15 +4,12 @@ class MagicCube {
         this.scene = null;
         this.camera = null;
         this.renderer = null;
-
         this.replayscene = null;
         this.replaycamera = null;
         this.replayrenderer = null;
-
         this.solvedScene = null;
         this.solvedCamera = null;
         this.solvedRenderer = null;
-
         this.controls = null;
         this.solvedControls = null;
         this.replaycontrols = null;
@@ -467,25 +464,6 @@ class MagicCube {
         return cube;
     }
 
-
-
-
-    createTransparentCube(number) {
-        const geometry = new THREE.BoxGeometry(1, 1, 1);
-        const material = new THREE.MeshBasicMaterial({
-            color: new THREE.Color(255 / 255, 192 / 255, 203 / 255),
-            transparent: true,
-            opacity: 0.5,
-            depthTest: false,
-        });
-
-        const cube = new THREE.Mesh(geometry, material);
-        const numberSprite = this.createNumberSprite(number);
-        numberSprite.position.set(0, 0, 0);
-        cube.add(numberSprite);
-
-        return cube;
-    }
     changeYSpace(isAdd) {
         if (isAdd) {
             this.y_offset += 1;
