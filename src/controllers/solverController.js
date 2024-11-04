@@ -414,8 +414,8 @@ class Cube {
     }
 
     crossover(parent1, parent2) {
-        const child1 = parent1;
-        const child2 = parent2;
+        const child1 = JSON.parse(JSON.stringify(parent1));
+        const child2 = JSON.parse(JSON.stringify(parent2));
         const crossoverPoint = Math.floor(Math.random() * 5);
 
         for (let i = crossoverPoint; i < 5; i++) {
