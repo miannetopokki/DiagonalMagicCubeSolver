@@ -41,6 +41,7 @@ class GeneticAlgorithm extends MagicCube {
         h_after,
         algoritma,
         n_iter,
+        n_population,
         h_values,
         avg_h_values,
         execution_time,
@@ -68,6 +69,7 @@ class GeneticAlgorithm extends MagicCube {
       document.getElementById("hAfterValue").innerText = h_after;
       document.getElementById("algoritmaSpan").innerText = algoritma;
       document.getElementById("iterasiSpan").innerText = n_iter;
+      document.getElementById("populasiSpan").innerText = n_population;
       document.getElementById("waktuEksekusiSpan").innerText = execution_time;
     //   document.getElementById("iterationSlider").max = n_iter; // Set max value for the slider
     } catch (error) {

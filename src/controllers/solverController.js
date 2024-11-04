@@ -370,7 +370,7 @@ class Cube {
         // Create an array of random cube states
         const population = [];
         for (let i = 0; i < size; i++) {
-            let cubeCopy = this.cube;
+            let cubeCopy = JSON.parse(JSON.stringify(this.cube));
             cubeCopy = this.randomizeCube(cubeCopy);
             population.push(cubeCopy);
         }
@@ -426,19 +426,14 @@ class Cube {
         }
         return [child1, child2];
     }
-    
-    timeBasedRandom(min, max) {
-        const randomValue = (Math.random() * Date.now()) % 1;
-        return Math.floor(randomValue * (max - min + 1)) + min;
-    }
     mutate(cubeState) {
         // Swap two random elements in the cube
-        let i1 = this.timeBasedRandom(0, 4);
-        let j1 = this.timeBasedRandom(0, 4);
-        let k1 = this.timeBasedRandom(0, 4);
-        let i2 = this.timeBasedRandom(0, 4);
-        let j2 = this.timeBasedRandom(0, 4);
-        let k2 = this.timeBasedRandom(0, 4);
+        let i1 = Math.floor(Math.random() * 5);
+        let j1 = Math.floor(Math.random() * 5);
+        let k1 = Math.floor(Math.random() * 5);
+        let i2 = Math.floor(Math.random() * 5);
+        let j2 = Math.floor(Math.random() * 5);
+        let k2 = Math.floor(Math.random() * 5);
 
         [cubeState[i1][j1][k1], cubeState[i2][j2][k2]] = [cubeState[i2][j2][k2], cubeState[i1][j1][k1]];
         return cubeState;
@@ -446,13 +441,13 @@ class Cube {
     randomizeCube(cubeState) {
         while (true) {
             // tukar 2 angka
-            let i = this.timeBasedRandom(0, 4);
-            let j = this.timeBasedRandom(0, 4);
-            let k = this.timeBasedRandom(0, 4);
+            let i = Math.floor(Math.random() * 5);
+            let j = Math.floor(Math.random() * 5);
+            let k = Math.floor(Math.random() * 5);
     
-            let x = this.timeBasedRandom(0, 4);
-            let y = this.timeBasedRandom(0, 4);
-            let z = this.timeBasedRandom(0, 4);
+            let x = Math.floor(Math.random() * 5);
+            let y = Math.floor(Math.random() * 5);
+            let z = Math.floor(Math.random() * 5);
             if (i !== x || j !== y || k !== z) {
                 [cubeState[i][j][k], cubeState[x][y][z]] = [cubeState[x][y][z], cubeState[i][j][k]];
                 return cubeState;
@@ -725,6 +720,7 @@ export function solveGeneticAlgorithm(req, res) {
         message: "Kubus berhasil diselesaikan",
         algoritma: "Genetic Algorithm",
         n_iter: iter,
+        n_population : banyakPopulasi,
         solvedCube,
         h_before: objFuncBefore,
         h_after: objFuncAfter,
